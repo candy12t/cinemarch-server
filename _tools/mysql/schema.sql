@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `movies` (
 
 CREATE TABLE IF NOT EXISTS `screening_movie_screening_types` (
   `id` VARCHAR(255) NOT NULL,
-  `cinema_id` VARCHAR(255) NOT NULL,
   `screening_movie_id` VARCHAR(255) NOT NULL,
   `screening_type_id` VARCHAR(255) NOT NULL,
   `created_at` DATETIME NOT NULL,
