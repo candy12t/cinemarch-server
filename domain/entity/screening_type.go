@@ -1,20 +1,13 @@
 package entity
 
-import "time"
-
 type ScreeningType struct {
-	ID        UUID
-	Type      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID   UUID
+	Type string
 }
 
 func NewScreeningType(_type string) *ScreeningType {
-	now := time.Now()
 	return &ScreeningType{
-		ID:        NewUUID(),
-		Type:      _type,
-		CreatedAt: now,
-		UpdatedAt: now,
+		ID:   NewUUID(),
+		Type: _type,
 	}
 }

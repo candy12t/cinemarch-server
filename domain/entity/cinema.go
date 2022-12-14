@@ -2,7 +2,6 @@ package entity
 
 import (
 	"net/url"
-	"time"
 )
 
 type CinemaName string
@@ -17,20 +16,15 @@ type Cinema struct {
 	Prefecture Prefecture
 	Address    CinemaAddress
 	URL        *url.URL
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
 }
 
 func NewCinema(name CinemaName, prefecture Prefecture, address CinemaAddress, _url *url.URL) *Cinema {
-	now := time.Now()
 	return &Cinema{
 		ID:         NewUUID(),
 		Name:       name,
 		Prefecture: prefecture,
 		Address:    address,
 		URL:        _url,
-		CreatedAt:  now,
-		UpdatedAt:  now,
 	}
 }
 
