@@ -28,8 +28,10 @@ func (m *Movie) Finish() {
 
 type MovieTitle string
 
-// TODO: validation
 func NewMovieTitle(title string) (MovieTitle, error) {
+	if title == "" || len([]rune(title)) > 255 {
+		return "", ErrInvalidLengthMovieTitle
+	}
 	return MovieTitle(title), nil
 }
 
