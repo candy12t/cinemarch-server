@@ -10,4 +10,6 @@ var (
 	ErrInvalidLengthPrefecture = errors.New("prefecture must be 1-255 characters")
 	ErrInvalidLengthAddress    = errors.New("address name must be 1-255 characters")
 	ErrInvalidLengthCinemaURL  = errors.New("cinema url must be 1-255 characters")
+
+	ErrMovieNotFound = errors.New("movie not found")
 )
