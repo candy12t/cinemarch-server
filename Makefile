@@ -18,14 +18,14 @@ test:
 .PHONY: run-local-db
 run-local-db:
 	set -a && \
-		source $(ENV_LOCAL_FILE) && \
+		. $(ENV_LOCAL_FILE) && \
 		docker compose up -d && \
 		until mysql -u$${DB_USER} -p$${DB_PASSWORD} -h$${DB_HOST} -P$${DB_PORT} -e "SELECT 1"; do sleep 10; done
 
 .PHONY: migrate
 migrate:
 	set -a && \
-		source $(ENV_LOCAL_FILE) && \
+		. $(ENV_LOCAL_FILE) && \
 		mysql -u$${DB_USER} -p$${DB_PASSWORD} -h$${DB_HOST} -P$${DB_PORT} < _tools/mysql/schema.sql
 
 .PHONY: stop-local-db
