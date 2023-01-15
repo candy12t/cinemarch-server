@@ -19,6 +19,12 @@ jobs:
       - name: Download dependencies
         run: go mod download
 
+      - name: Setup mysql
+        run: make run-local-db
+
+      - name: Migration
+        run: make migrate
+
       - name: Run tests
         run: make test
 

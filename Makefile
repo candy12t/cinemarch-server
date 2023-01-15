@@ -1,5 +1,11 @@
+BIN := bin/cs
+
 ENV_LOCAL_FILE := env.local
 ENV_LOCAL = $(shell cat $(ENV_LOCAL_FILE))
+
+.PHONY: build
+build: test clean
+	go build -o $(BIN) -v ./cmd/cinema-search
 
 .PHONY: serve
 serve:
