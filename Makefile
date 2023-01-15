@@ -15,6 +15,11 @@ serve:
 test:
 	$(ENV_LOCAL) go test ./... -count=1 --race -v
 
+.PHONY: clean
+clean:
+	rm -rf $(BIN)
+	go clean
+
 .PHONY: run-local-db
 run-local-db:
 	set -a && \
