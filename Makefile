@@ -15,6 +15,12 @@ serve:
 test:
 	$(ENV_LOCAL) go test ./... -count=1 --race -v
 
+.PHONY: test-with-coverage
+test-with-coverage:
+	$(ENV_LOCAL) go test ./... -count=1 --race -v -coverprofile=profile.out && \
+		go tool cover -html=profile.out && \
+		rm -rf profile.out
+
 .PHONY: clean
 clean:
 	rm -rf $(BIN)
