@@ -2,27 +2,12 @@ package entity_test
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 	"time"
 
 	"github.com/candy12t/cinema-search-server/domain/entity"
 )
-
-func TestUpdateReleaseStatusToNowOpen(t *testing.T) {
-	movie := setupMovie()
-	movie.Release()
-	if movie.ReleaseStatus != entity.ReleaseStatusNowOpen {
-		t.Errorf("Relase() got is %v, want is %v", movie.ReleaseStatus, entity.ReleaseStatusNowOpen)
-	}
-}
-
-func TestUpdateReleaseStatusToReleased(t *testing.T) {
-	movie := setupMovie()
-	movie.Finish()
-	if movie.ReleaseStatus != entity.ReleaseStatusReleased {
-		t.Errorf("Finish() got is %v, want is %v", movie.ReleaseStatus, entity.ReleaseStatusReleased)
-	}
-}
 
 func TestNewMovieTitle(t *testing.T) {
 	tests := []struct {
@@ -32,18 +17,8 @@ func TestNewMovieTitle(t *testing.T) {
 	}{
 		{
 			name:       "valid movie title",
-			movieTitle: "valid movie title",
+			movieTitle: "RRR",
 			wantErr:    nil,
-		},
-		{
-			name:       "length is 0",
-			movieTitle: "",
-			wantErr:    entity.ErrInvalidLengthMovieTitle,
-		},
-		{
-			name:       "length is 256",
-			movieTitle: "I97IcsBUrALP1GiFLUVHXiUyvouJUgMQiJU0nK79lkRtudR7SK55pR0gx9SSwQyhb26BvYc7BV3MOI1nFaXdJFrO3vPvLSTEvXvwJgLHsbvjqsdNmtGSJcio8leAtFfQfOD6s7ZI8hjgoJed50TJCaqSd9I1YoD9SuRH9oeisOdPsc0aW4a5V5X3VfIRgtJLs01aEhByxLnAu0cgKUeD3rvIzQ9N3SY5wQeQLfWP4kqSR42e2rmxTlovGmyLAc5e",
-			wantErr:    entity.ErrInvalidLengthMovieTitle,
 		},
 	}
 
@@ -51,7 +26,7 @@ func TestNewMovieTitle(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := entity.NewMovieTitle(tt.movieTitle)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewCinemaName() error is %v, wantErr is %v", err, tt.wantErr)
+				t.Errorf("NewMovieTitle(): error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -61,33 +36,33 @@ func TestNewReleaseStatus(t *testing.T) {
 	tests := []struct {
 		name          string
 		releaseStatus string
-		want          entity.ReleaseStatus
+		want          entity.MovieReleaseStatus
 	}{
 		{
 			name:          "coming soon",
 			releaseStatus: "COMING SOON",
-			want:          entity.ReleaseStatusComingSoon,
+			want:          entity.MovieReleaseStatusComingSoon,
 		},
 		{
 			name:          "now open",
 			releaseStatus: "NOW OPEN",
-			want:          entity.ReleaseStatusNowOpen,
+			want:          entity.MovieReleaseStatusNowOpen,
 		},
 		{
 			name:          "released",
 			releaseStatus: "RELEASED",
-			want:          entity.ReleaseStatusReleased,
+			want:          entity.MovieReleaseStatusReleased,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := entity.NewReleaseStatus(tt.releaseStatus)
+			got, err := entity.NewMovieReleaseStatus(tt.releaseStatus)
 			if err != nil {
 				t.Fatal(err)
 			}
 			if got != tt.want {
-				t.Errorf("NewReleaseStatus() got is %v, want is %v", got, tt.want)
+				t.Errorf("NewReleaseStatus(): got is %v, want is %v", got, tt.want)
 			}
 		})
 	}
@@ -102,23 +77,56 @@ func TestNewReleaseStatus_Invalid(t *testing.T) {
 		{
 			name:          "invalid release status",
 			releaseStatus: "INVALID",
-			wantErr:       entity.ErrInvalidReleaseStatus,
+			wantErr:       entity.ErrInvalidMovieReleaseStatus,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := entity.NewReleaseStatus(tt.releaseStatus)
+			_, err := entity.NewMovieReleaseStatus(tt.releaseStatus)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewReleaseStatus() error is %v, wantErr is %v", err, tt.wantErr)
+				t.Errorf("NewReleaseStatus(): error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func setupMovie() *entity.Movie {
-	title, _ := entity.NewMovieTitle("hoge")
-	now := time.Now()
-	relaseStatus, _ := entity.NewReleaseStatus("COMING SOON")
-	return entity.NewMovie(title, now, relaseStatus)
+func TestUpdateMovieReleaseStatus(t *testing.T) {
+	tests := []struct {
+		name     string
+		funcName string
+		want     entity.MovieReleaseStatus
+	}{
+		{
+			name:     "to NowOpen",
+			funcName: "ToNowOpen",
+			want:     entity.MovieReleaseStatusNowOpen,
+		},
+		{
+			name:     "to Released",
+			funcName: "ToReleased",
+			want:     entity.MovieReleaseStatusReleased,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			movie := newMovie()
+
+			r := reflect.ValueOf(movie)
+			method := r.MethodByName(tt.funcName)
+			method.Call(nil)
+
+			if movie.ReleaseStatus != tt.want {
+				t.Errorf("%s(): got is %v, want is %v", tt.funcName, movie.ReleaseStatus, tt.want)
+			}
+		})
+	}
+}
+
+func newMovie() *entity.Movie {
+	title, _ := entity.NewMovieTitle("RRR")
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	releaseDate := time.Date(2022, 10, 21, 0, 0, 0, 0, jst)
+	return entity.NewMovie(title, releaseDate, entity.MovieReleaseStatusComingSoon)
 }

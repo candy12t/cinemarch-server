@@ -2,14 +2,29 @@ package entity
 
 import "time"
 
+type MovieTitle string
+type MovieReleaseStatus string
+
 type Movie struct {
 	ID            UUID
 	Title         MovieTitle
 	ReleaseDate   time.Time
-	ReleaseStatus ReleaseStatus
+	ReleaseStatus MovieReleaseStatus
 }
 
-func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus ReleaseStatus) *Movie {
+const (
+	MovieReleaseStatusComingSoon MovieReleaseStatus = "COMING SOON"
+	MovieReleaseStatusNowOpen    MovieReleaseStatus = "NOW OPEN"
+	MovieReleaseStatusReleased   MovieReleaseStatus = "RELEASED"
+)
+
+var releaseStatuses = []MovieReleaseStatus{
+	MovieReleaseStatusComingSoon,
+	MovieReleaseStatusNowOpen,
+	MovieReleaseStatusReleased,
+}
+
+func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus MovieReleaseStatus) *Movie {
 	return &Movie{
 		ID:            NewUUID(),
 		Title:         title,
@@ -18,15 +33,13 @@ func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus ReleaseStat
 	}
 }
 
-func (m *Movie) Release() {
-	m.ReleaseStatus = ReleaseStatusNowOpen
+func (m *Movie) ToNowOpen() {
+	m.ReleaseStatus = MovieReleaseStatusNowOpen
 }
 
-func (m *Movie) Finish() {
-	m.ReleaseStatus = ReleaseStatusReleased
+func (m *Movie) ToReleased() {
+	m.ReleaseStatus = MovieReleaseStatusReleased
 }
-
-type MovieTitle string
 
 func NewMovieTitle(title string) (MovieTitle, error) {
 	if title == "" || len([]rune(title)) > 255 {
@@ -35,25 +48,19 @@ func NewMovieTitle(title string) (MovieTitle, error) {
 	return MovieTitle(title), nil
 }
 
-type ReleaseStatus string
+func (mt MovieTitle) String() string {
+	return string(mt)
+}
 
-const (
-	ReleaseStatusComingSoon ReleaseStatus = "COMING SOON"
-	ReleaseStatusNowOpen    ReleaseStatus = "NOW OPEN"
-	ReleaseStatusReleased   ReleaseStatus = "RELEASED"
-)
-
-var releaseStatuses = []ReleaseStatus{ReleaseStatusComingSoon, ReleaseStatusNowOpen, ReleaseStatusReleased}
-
-func NewReleaseStatus(releaseStatus string) (ReleaseStatus, error) {
+func NewMovieReleaseStatus(releaseStatus string) (MovieReleaseStatus, error) {
 	for _, rs := range releaseStatuses {
 		if rs.String() == releaseStatus {
 			return rs, nil
 		}
 	}
-	return "", ErrInvalidReleaseStatus
+	return "", ErrInvalidMovieReleaseStatus
 }
 
-func (rs ReleaseStatus) String() string {
-	return string(rs)
+func (mrs MovieReleaseStatus) String() string {
+	return string(mrs)
 }

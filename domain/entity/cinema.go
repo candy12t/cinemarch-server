@@ -1,65 +1,56 @@
 package entity
 
-import (
-	"net/url"
-)
+import "net/url"
 
 type CinemaName string
-
-type Prefecture string
-
 type CinemaAddress string
 
-type CinemaURL string
-
 type Cinema struct {
-	ID         UUID
-	Name       CinemaName
-	Prefecture Prefecture
-	Address    CinemaAddress
-	URL        CinemaURL
+	ID      UUID
+	Name    CinemaName
+	Address CinemaAddress
+	URL     *url.URL
 }
 
-func NewCinema(name CinemaName, prefecture Prefecture, address CinemaAddress, _url CinemaURL) *Cinema {
+func NewCinema(name CinemaName, address CinemaAddress, _url *url.URL) *Cinema {
 	return &Cinema{
-		ID:         NewUUID(),
-		Name:       name,
-		Prefecture: prefecture,
-		Address:    address,
-		URL:        _url,
+		ID:      NewUUID(),
+		Name:    name,
+		Address: address,
+		URL:     _url,
 	}
 }
 
 func NewCinemaName(name string) (CinemaName, error) {
 	if name == "" || len([]rune(name)) > 255 {
-		return "", ErrInvalidLengthMovieTitle
+		return "", ErrInvalidLengthCinemaName
 	}
 	return CinemaName(name), nil
 }
 
-// TODO: define enum
-func NewCinemaPrefecture(prefecture string) (Prefecture, error) {
-	if prefecture == "" || len([]rune(prefecture)) > 255 {
-		return "", ErrInvalidLengthPrefecture
-	}
-	return Prefecture(prefecture), nil
+func (cn CinemaName) String() string {
+	return string(cn)
 }
 
 func NewCinemaAddress(address string) (CinemaAddress, error) {
 	if address == "" || len([]rune(address)) > 255 {
-		return "", ErrInvalidLengthAddress
+		return "", ErrInvalidLengthCinemaAddress
 	}
 	return CinemaAddress(address), nil
 }
 
-func NewCinemaURL(_url string) (CinemaURL, error) {
-	u, err := url.Parse(_url)
+func (ca CinemaAddress) String() string {
+	return string(ca)
+}
+
+func NewCinemaURL(urlStr string) (*url.URL, error) {
+	u, err := url.Parse(urlStr)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if u.String() == "" || len([]rune(u.String())) > 255 {
-		return "", ErrInvalidLengthAddress
+		return nil, ErrInvalidLengthCinemaURL
 	}
-	return CinemaURL(u.String()), nil
+	return u, nil
 }

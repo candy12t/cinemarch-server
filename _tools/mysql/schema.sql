@@ -4,7 +4,6 @@ USE `cinema-search`;
 CREATE TABLE IF NOT EXISTS `cinemas` (
   `id` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `prefecture` VARCHAR(255) NOT NULL,
   `address` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
