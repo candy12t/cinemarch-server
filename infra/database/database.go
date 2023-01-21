@@ -1,13 +1,12 @@
 package database
 
 import (
-	"database/sql"
-
 	"github.com/candy12t/cinema-search-server/config"
+	"github.com/jmoiron/sqlx"
 )
 
-func NewDB() (*sql.DB, func() error, error) {
-	db, err := sql.Open("mysql", config.DSN())
+func NewDB() (*sqlx.DB, func() error, error) {
+	db, err := sqlx.Open("mysql", config.DSN())
 	if err != nil {
 		return nil, nil, err
 	}
