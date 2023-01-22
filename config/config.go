@@ -24,3 +24,7 @@ func DSN() string {
 	}
 	return conf.FormatDSN()
 }
+
+func HTTPPort() string {
+	return os.Getenv("HTTP_PORT")
+}
