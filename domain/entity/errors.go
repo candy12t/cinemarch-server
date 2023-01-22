@@ -11,4 +11,7 @@ var (
 	ErrInvalidLengthCinemaURL     = errors.New("cinema url must be 1-255 characters")
 
 	ErrInvalidLengthScreeningTypeName = errors.New("screening type name must be 1-255 characters")
+
+	ErrMovieNotFound       = errors.New("movie not found")
+	ErrMovieAlreadyExisted = errors.New("movie has already existed")
 )
