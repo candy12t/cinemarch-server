@@ -1,30 +1,19 @@
 package entity
 
-import "time"
+import (
+	"time"
 
-type MovieTitle string
-type MovieReleaseStatus string
+	"github.com/candy12t/cinema-search-server/lib"
+)
 
 type Movie struct {
 	ID            UUID
 	Title         MovieTitle
 	ReleaseDate   time.Time
-	ReleaseStatus MovieReleaseStatus
+	ReleaseStatus ReleaseStatus
 }
 
-const (
-	MovieReleaseStatusComingSoon MovieReleaseStatus = "COMING SOON"
-	MovieReleaseStatusNowOpen    MovieReleaseStatus = "NOW OPEN"
-	MovieReleaseStatusReleased   MovieReleaseStatus = "RELEASED"
-)
-
-var releaseStatuses = []MovieReleaseStatus{
-	MovieReleaseStatusComingSoon,
-	MovieReleaseStatusNowOpen,
-	MovieReleaseStatusReleased,
-}
-
-func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus MovieReleaseStatus) *Movie {
+func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus ReleaseStatus) *Movie {
 	return &Movie{
 		ID:            NewUUID(),
 		Title:         title,
@@ -33,13 +22,31 @@ func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus MovieReleas
 	}
 }
 
-func (m *Movie) ToNowOpen() {
-	m.ReleaseStatus = MovieReleaseStatusNowOpen
+func (m *Movie) ToNowOpen() error {
+	if m.isBeforeReleaseDate() {
+		return ErrNotAllowChangeMovieReleaseStatus
+	}
+	m.ReleaseStatus = NowOpen
+	return nil
 }
 
-func (m *Movie) ToReleased() {
-	m.ReleaseStatus = MovieReleaseStatusReleased
+func (m *Movie) ToReleased() error {
+	if m.ReleaseStatus != NowOpen {
+		return ErrNotAllowChangeMovieReleaseStatus
+	}
+	m.ReleaseStatus = Released
+	return nil
 }
+
+func (m *Movie) UpdateReleaseDate(releaseDate time.Time) {
+	m.ReleaseDate = releaseDate
+}
+
+func (m *Movie) isBeforeReleaseDate() bool {
+	return lib.TimeNow().Before(m.ReleaseDate)
+}
+
+type MovieTitle string
 
 func NewMovieTitle(title string) (MovieTitle, error) {
 	if title == "" || len([]rune(title)) > 255 {
@@ -48,19 +55,39 @@ func NewMovieTitle(title string) (MovieTitle, error) {
 	return MovieTitle(title), nil
 }
 
-func (mt MovieTitle) String() string {
-	return string(mt)
+func (m MovieTitle) String() string {
+	return string(m)
 }
 
-func NewMovieReleaseStatus(releaseStatus string) (MovieReleaseStatus, error) {
+type ReleaseStatus string
+
+const (
+	ComingSoon ReleaseStatus = "COMING SOON"
+	NowOpen    ReleaseStatus = "NOW OPEN"
+	Released   ReleaseStatus = "RELEASED"
+)
+
+var releaseStatuses = []ReleaseStatus{ComingSoon, NowOpen, Released}
+
+func NewReleaseStatus(releaseStatus string) (ReleaseStatus, error) {
 	for _, rs := range releaseStatuses {
 		if rs.String() == releaseStatus {
 			return rs, nil
 		}
 	}
-	return "", ErrInvalidMovieReleaseStatus
+	return "", ErrInvalidReleaseStatus
 }
 
-func (mrs MovieReleaseStatus) String() string {
-	return string(mrs)
+func (rs ReleaseStatus) String() string {
+	return string(rs)
 }
+
+// var dateFormat = "2006-01-02"
+
+// func NewMovieReleaseDate(releaseDate string) (time.Time, error) {
+// 	date, err := time.Parse(dateFormat, releaseDate)
+// 	if err != nil {
+// 		return time.Time{}, err
+// 	}
+// 	return date, nil
+// }

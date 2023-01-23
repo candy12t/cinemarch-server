@@ -3,8 +3,10 @@ package entity
 import "errors"
 
 var (
-	ErrInvalidLengthMovieTitle   = errors.New("movie title must be 1-255 characters")
-	ErrInvalidMovieReleaseStatus = errors.New("invalid release status")
+	ErrInvalidReleaseStatus             = errors.New("invalid release status")
+	ErrNotAllowChangeMovieReleaseStatus = errors.New("not allow change release status")
+
+	ErrInvalidLengthMovieTitle = errors.New("movie title must be 1-255 characters")
 
 	ErrInvalidLengthCinemaName    = errors.New("cinema name must be 1-255 characters")
 	ErrInvalidLengthCinemaAddress = errors.New("address name must be 1-255 characters")

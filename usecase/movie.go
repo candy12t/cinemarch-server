@@ -39,7 +39,7 @@ func (u *MovieUseCase) Save(ctx context.Context, title string, releaseDate time.
 		return nil, err
 	}
 
-	movieReleaseStatus, err := entity.NewMovieReleaseStatus(releaseStatus)
+	movieReleaseStatus, err := entity.NewReleaseStatus(releaseStatus)
 	if err != nil {
 		return nil, err
 	}

@@ -74,7 +74,7 @@ func (r *MovieRepository) movieToDTO(movie *entity.Movie) *movieDTO {
 }
 
 func (r *MovieRepository) dtoToMovie(dto *movieDTO) (*entity.Movie, error) {
-	relaseStatus, err := entity.NewMovieReleaseStatus(dto.ReleaseStatus)
+	relaseStatus, err := entity.NewReleaseStatus(dto.ReleaseStatus)
 	if err != nil {
 		return nil, err
 	}
