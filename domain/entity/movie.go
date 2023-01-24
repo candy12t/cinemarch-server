@@ -82,12 +82,16 @@ func (rs ReleaseStatus) String() string {
 	return string(rs)
 }
 
-// var dateFormat = "2006-01-02"
+var dateFormat = "2006-01-02"
 
-// func NewMovieReleaseDate(releaseDate string) (time.Time, error) {
-// 	date, err := time.Parse(dateFormat, releaseDate)
-// 	if err != nil {
-// 		return time.Time{}, err
-// 	}
-// 	return date, nil
-// }
+func NewMovieReleaseDate(releaseDate string) (time.Time, error) {
+	date, err := parseDate(releaseDate)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return date, nil
+}
+
+func parseDate(date string) (time.Time, error) {
+	return time.Parse(dateFormat, date)
+}

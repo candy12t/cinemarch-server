@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/candy12t/cinema-search-server/domain/entity"
 	"github.com/candy12t/cinema-search-server/usecase"
@@ -52,14 +51,41 @@ func (h *MovieHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	releaseDate, err := time.Parse(format, req.ReleaseDate)
+	params := usecase.CreateMovieParams{
+		Title:         req.Title,
+		ReleaseDate:   req.ReleaseDate,
+		ReleaseStatus: req.ReleaseStatus,
+	}
+
+	ctx := r.Context()
+	movie, err := h.movieUC.Create(ctx, params)
 	if err != nil {
+		ResponseJSON(w, NewHTTPError(err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	ResponseJSON(w, movieToJSON(movie), http.StatusOK)
+}
+
+func (h *MovieHandler) Update(w http.ResponseWriter, r *http.Request) {
+	type reqJSON struct {
+		ReleaseDate   string
+		ReleaseStatus string
+	}
+	req := new(reqJSON)
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		ResponseJSON(w, NewHTTPError(err.Error()), http.StatusBadRequest)
 		return
 	}
 
+	params := usecase.UpdateMovieParams{
+		ReleaseDate:   req.ReleaseDate,
+		ReleaseStatus: req.ReleaseStatus,
+	}
+
+	movieID := chi.URLParam(r, "movieID")
 	ctx := r.Context()
-	movie, err := h.movieUC.Save(ctx, req.Title, releaseDate, req.ReleaseStatus)
+	movie, err := h.movieUC.Update(ctx, movieID, params)
 	if err != nil {
 		ResponseJSON(w, NewHTTPError(err.Error()), http.StatusInternalServerError)
 		return
