@@ -40,7 +40,8 @@ func (r *MovieRepository) Save(ctx context.Context, movie *entity.Movie) error {
 	dto := r.movieToDTO(movie)
 	query := `INSERT INTO movies (id, title, release_date, release_status) VALUE (:id, :title, :release_date, :release_status)`
 	if _, err := r.db.NamedExecContext(ctx, query, dto); err != nil {
-		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == errorNumDuplicateEntry {
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr); mysqlErr.Number == MySQLDuplicateEntryErrorCode {
 			return entity.ErrMovieAlreadyExisted
 		}
 		return err
