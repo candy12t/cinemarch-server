@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `cinema-search`;
-USE `cinema-search`;
+CREATE DATABASE IF NOT EXISTS `cinemarch`;
+USE `cinemarch`;
 
 CREATE TABLE IF NOT EXISTS `cinemas` (
   `id` VARCHAR(255) NOT NULL,

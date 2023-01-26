@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/candy12t/cinema-search-server/lib"
+	"github.com/candy12t/cinemarch-server/lib"
 )
 
 type Movie struct {

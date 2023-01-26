@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	"github.com/candy12t/cinema-search-server/config"
+	"github.com/candy12t/cinemarch-server/config"
 )
 
 func TestDSN(t *testing.T) {
@@ -13,7 +13,7 @@ func TestDSN(t *testing.T) {
 	}{
 		{
 			name: "be able to read environment variable to configure DSN",
-			want: "cs:password@tcp(127.0.0.1:3306)/cinema-search?parseTime=true",
+			want: "cinemarch:password@tcp(127.0.0.1:3306)/cinemarch?parseTime=true",
 		},
 	}
 

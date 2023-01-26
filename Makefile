@@ -1,15 +1,15 @@
-BIN := bin/cs
+BIN := bin/cinemarch
 
 ENV_LOCAL_FILE := ./env.local
 ENV_LOCAL = $(shell cat $(ENV_LOCAL_FILE))
 
 .PHONY: build
 build: test clean
-	go build -o $(BIN) -v ./cmd/cinema-search
+	go build -o $(BIN) -v ./cmd/cinemarch
 
 .PHONY: serve
 serve:
-	$(ENV_LOCAL) go run ./cmd/cinema-search/main.go
+	$(ENV_LOCAL) go run ./cmd/cinemarch/main.go
 
 .PHONY: test
 test:

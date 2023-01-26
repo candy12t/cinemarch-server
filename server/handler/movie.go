@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/candy12t/cinema-search-server/domain/entity"
-	"github.com/candy12t/cinema-search-server/usecase"
+	"github.com/candy12t/cinemarch-server/domain/entity"
+	"github.com/candy12t/cinemarch-server/usecase"
 	"github.com/go-chi/chi/v5"
 )
 

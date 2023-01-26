@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/candy12t/cinema-search-server/domain/entity"
-	"github.com/candy12t/cinema-search-server/domain/repository"
+	"github.com/candy12t/cinemarch-server/domain/entity"
+	"github.com/candy12t/cinemarch-server/domain/repository"
 )
 
 type Movie interface {

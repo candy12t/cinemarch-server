@@ -11,9 +11,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -o bin/cs -v ./cmd/cinema-search
+RUN go build -o bin/cinemarch -v ./cmd/cinemarch
 
 
 FROM scratch as prod
-COPY --from=builder /app/bin/cs /cs
-CMD ["/cs"]
+COPY --from=builder /app/bin/cinemarch /cinemarch
+CMD ["/cinemarch"]

@@ -1,4 +1,4 @@
-module github.com/candy12t/cinema-search-server
+module github.com/candy12t/cinemarch-server
 
 go 1.18
 

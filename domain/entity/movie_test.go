@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/candy12t/cinema-search-server/domain/entity"
-	"github.com/candy12t/cinema-search-server/lib"
+	"github.com/candy12t/cinemarch-server/domain/entity"
+	"github.com/candy12t/cinemarch-server/lib"
 )
 
 func TestNewMovieTitle(t *testing.T) {

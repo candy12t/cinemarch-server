@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/candy12t/cinema-search-server/config"
-	"github.com/candy12t/cinema-search-server/infra/database"
-	"github.com/candy12t/cinema-search-server/server"
-	"github.com/candy12t/cinema-search-server/usecase"
+	"github.com/candy12t/cinemarch-server/config"
+	"github.com/candy12t/cinemarch-server/infra/database"
+	"github.com/candy12t/cinemarch-server/server"
+	"github.com/candy12t/cinemarch-server/usecase"
 )
 
 func main() {

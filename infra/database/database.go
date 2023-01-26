@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/candy12t/cinema-search-server/config"
+	"github.com/candy12t/cinemarch-server/config"
 	"github.com/jmoiron/sqlx"
 )
 

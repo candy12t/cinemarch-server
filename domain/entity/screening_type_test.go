@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/candy12t/cinema-search-server/domain/entity"
+	"github.com/candy12t/cinemarch-server/domain/entity"
 )
 
 func TestNewScreeningTypeName(t *testing.T) {

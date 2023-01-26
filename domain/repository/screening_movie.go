@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/candy12t/cinema-search-server/domain/entity"
+	"github.com/candy12t/cinemarch-server/domain/entity"
 )
 
 type ScreeningMovie interface {

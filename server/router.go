@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/candy12t/cinema-search-server/server/handler"
-	"github.com/candy12t/cinema-search-server/usecase"
+	"github.com/candy12t/cinemarch-server/server/handler"
+	"github.com/candy12t/cinemarch-server/usecase"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
