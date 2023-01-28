@@ -8,6 +8,6 @@ import (
 
 type Movie interface {
 	FindByID(ctx context.Context, movieID entity.UUID) (*entity.Movie, error)
-	Save(ctx context.Context, movie *entity.Movie) error
+	Create(ctx context.Context, movie *entity.Movie) error
 	Update(ctx context.Context, movie *entity.Movie) error
 }

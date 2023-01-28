@@ -51,7 +51,7 @@ func (u *MovieUseCase) Create(ctx context.Context, params CreateMovieParams) (*M
 	}
 
 	movie := entity.NewMovie(movieTitle, movieReleaseDate, movieReleaseStatus)
-	if err := u.movieRepo.Save(ctx, movie); err != nil {
+	if err := u.movieRepo.Create(ctx, movie); err != nil {
 		return nil, err
 	}
 

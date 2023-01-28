@@ -79,7 +79,7 @@ func TestMovieRepository_FindByID(t *testing.T) {
 	}
 }
 
-func TestMovieRepository_Save(t *testing.T) {
+func TestMovieRepository_Create(t *testing.T) {
 	db, cleanup, err := NewDB()
 	if err != nil {
 		t.Fatal(err)
@@ -111,7 +111,7 @@ func TestMovieRepository_Save(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "be able to save new movie",
+			name: "be able to create new movie",
 			movie: &entity.Movie{
 				ID:            entity.UUID("new_movie_id"),
 				Title:         entity.MovieTitle("new_movie_title"),
@@ -135,8 +135,8 @@ func TestMovieRepository_Save(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := NewMovieRepository(db)
-			if err := r.Save(context.Background(), tt.movie); !errors.Is(err, tt.wantErr) {
-				t.Errorf("MovieRepository.Save() got error is %v, want error is %v", err, tt.wantErr)
+			if err := r.Create(context.Background(), tt.movie); !errors.Is(err, tt.wantErr) {
+				t.Errorf("MovieRepository.Create() got error is %v, want error is %v", err, tt.wantErr)
 			}
 			t.Cleanup(func() {
 				if _, err := db.NamedExec("DELETE FROM movies WHERE id = :id", r.movieToDTO(tt.movie)); err != nil {

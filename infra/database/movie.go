@@ -36,7 +36,7 @@ func (r *MovieRepository) FindByID(ctx context.Context, movieID entity.UUID) (*e
 	return r.dtoToMovie(dto)
 }
 
-func (r *MovieRepository) Save(ctx context.Context, movie *entity.Movie) error {
+func (r *MovieRepository) Create(ctx context.Context, movie *entity.Movie) error {
 	dto := r.movieToDTO(movie)
 	query := `INSERT INTO movies (id, title, release_date, release_status) VALUE (:id, :title, :release_date, :release_status)`
 	if _, err := r.db.NamedExecContext(ctx, query, dto); err != nil {
