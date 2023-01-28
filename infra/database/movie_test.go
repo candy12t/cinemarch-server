@@ -64,14 +64,10 @@ func TestMovieRepository_FindByID(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := NewMovieRepository(db)
-
 			got, err := r.FindByID(context.Background(), tt.id)
-			if err != nil {
-				if !errors.Is(err, tt.wantErr) {
-					t.Fatal(err)
-				}
+			if !errors.Is(err, tt.wantErr) {
+				t.Errorf("MovieRepository().FindByID() error is %v, want error is %v", err, tt.wantErr)
 			}
-
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("MovieRepository.FindByID() got is %v, want is %v", got, tt.want)
 			}
@@ -136,7 +132,7 @@ func TestMovieRepository_Create(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			r := NewMovieRepository(db)
 			if err := r.Create(context.Background(), tt.movie); !errors.Is(err, tt.wantErr) {
-				t.Errorf("MovieRepository.Create() got error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("MovieRepository.Create() error is %v, want error is %v", err, tt.wantErr)
 			}
 			t.Cleanup(func() {
 				if _, err := db.NamedExec("DELETE FROM movies WHERE id = :id", r.movieToDTO(tt.movie)); err != nil {
@@ -186,6 +182,7 @@ func TestMovieRepository_Update(t *testing.T) {
 				ReleaseDate:   time.Date(2022, 10, 21, 0, 0, 0, 0, time.UTC),
 				ReleaseStatus: entity.Released,
 			},
+			wantErr: nil,
 		},
 	}
 
@@ -193,7 +190,7 @@ func TestMovieRepository_Update(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			r := NewMovieRepository(db)
 			if err := r.Update(context.Background(), tt.movie); err != nil {
-				t.Errorf("MovieRepository.Update() got error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("MovieRepository.Update() error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}

@@ -29,7 +29,7 @@ func TestNewScreeningTypeName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := entity.NewScreeningTypeName(tt.screeningTypeName)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewScreeningTypeName(): error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("NewScreeningTypeName() error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}

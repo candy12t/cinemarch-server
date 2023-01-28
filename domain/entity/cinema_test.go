@@ -24,7 +24,7 @@ func TestNewCinemaName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := entity.NewCinemaName(tt.cinemaName)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewCinemaName(): error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("NewCinemaName() error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -47,7 +47,7 @@ func TestNewCinemaAddress(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := entity.NewCinemaAddress(tt.cinemaAddress)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewCinemaAddress(): error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("NewCinemaAddress() error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -70,7 +70,7 @@ func TestNewCinemaURL(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := entity.NewCinemaURL(tt.cinemaURL)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("NewCinemaURL(): error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("NewCinemaURL() error is %v, want error is %v", err, tt.wantErr)
 			}
 		})
 	}
