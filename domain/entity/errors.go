@@ -19,4 +19,7 @@ var (
 
 	ErrCinemaNotFound       = errors.New("cinema not found")
 	ErrCinemaAlreadyExisted = errors.New("cinema has already existed")
+
+	ErrScreeningTypeNotFound       = errors.New("screening type not found")
+	ErrScreeningTypeAlreadyExisted = errors.New("screening type has already existed")
 )
