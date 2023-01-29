@@ -9,5 +9,4 @@ import (
 type ScreeningMovie interface {
 	FindByID(ctx context.Context, screeningMovieID entity.UUID) (*entity.ScreeningMovie, error)
 	Create(ctx context.Context, screeningMovie *entity.ScreeningMovie) error
-	Update(ctx context.Context, screeningMovie *entity.ScreeningMovie) error
 }
