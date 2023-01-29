@@ -9,5 +9,4 @@ import (
 type Cinema interface {
 	FindByID(ctx context.Context, cinemaID entity.UUID) (*entity.Cinema, error)
 	Create(ctx context.Context, cinema *entity.Cinema) error
-	Update(ctx context.Context, cinema *entity.Cinema) error
 }

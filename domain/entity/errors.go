@@ -16,4 +16,7 @@ var (
 
 	ErrMovieNotFound       = errors.New("movie not found")
 	ErrMovieAlreadyExisted = errors.New("movie has already existed")
+
+	ErrCinemaNotFound       = errors.New("cinema not found")
+	ErrCinemaAlreadyExisted = errors.New("cinema has already existed")
 )
