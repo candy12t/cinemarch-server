@@ -33,12 +33,16 @@ func (r *MovieRepository) FindByID(ctx context.Context, movieID entity.UUID) (*e
 		}
 		return nil, err
 	}
-	return r.dtoToMovie(dto)
+	releaseStatus, err := entity.NewReleaseStatus(dto.ReleaseStatus)
+	if err != nil {
+		return nil, err
+	}
+	return r.dtoToMovie(dto, releaseStatus), nil
 }
 
 func (r *MovieRepository) Create(ctx context.Context, movie *entity.Movie) error {
 	dto := r.movieToDTO(movie)
-	query := `INSERT INTO movies (id, title, release_date, release_status) VALUE (:id, :title, :release_date, :release_status)`
+	query := `INSERT INTO movies (id, title, release_date, release_status) VALUES (:id, :title, :release_date, :release_status)`
 	if _, err := r.db.NamedExecContext(ctx, query, dto); err != nil {
 		var mysqlErr *mysql.MySQLError
 		if errors.As(err, &mysqlErr); mysqlErr.Number == MySQLDuplicateEntryErrorCode {
@@ -74,16 +78,11 @@ func (r *MovieRepository) movieToDTO(movie *entity.Movie) *movieDTO {
 	}
 }
 
-func (r *MovieRepository) dtoToMovie(dto *movieDTO) (*entity.Movie, error) {
-	relaseStatus, err := entity.NewReleaseStatus(dto.ReleaseStatus)
-	if err != nil {
-		return nil, err
-	}
-
+func (r *MovieRepository) dtoToMovie(dto *movieDTO, releaseStatus entity.ReleaseStatus) *entity.Movie {
 	return &entity.Movie{
 		ID:            entity.UUID(dto.ID),
 		Title:         entity.MovieTitle(dto.Title),
 		ReleaseDate:   dto.ReleaseDate,
-		ReleaseStatus: relaseStatus,
-	}, nil
+		ReleaseStatus: releaseStatus,
+	}
 }

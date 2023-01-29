@@ -8,33 +8,11 @@ import (
 	"time"
 
 	"github.com/candy12t/cinemarch-server/domain/entity"
+	"github.com/jmoiron/sqlx"
 )
 
 func TestMovieRepository_FindByID(t *testing.T) {
-	db, cleanup, err := NewDB()
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := cleanup(); err != nil {
-			t.Fatal(err)
-		}
-	})
-
-	movie := &movieDTO{
-		ID:            "existing_movie_id",
-		Title:         "RRR",
-		ReleaseDate:   time.Date(2022, 10, 21, 0, 0, 0, 0, time.UTC),
-		ReleaseStatus: "NOW OPEN",
-	}
-	if _, err := db.NamedExec("INSERT movies (id, title, release_date, release_status) VALUES (:id, :title, :release_date, :release_status)", movie); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if _, err := db.NamedExec("DELETE FROM movies where id = :id", movie); err != nil {
-			t.Fatal(err)
-		}
-	})
+	db := prepareTestMovieRepository(t)
 
 	tests := []struct {
 		name    string
@@ -66,7 +44,7 @@ func TestMovieRepository_FindByID(t *testing.T) {
 			r := NewMovieRepository(db)
 			got, err := r.FindByID(context.Background(), tt.id)
 			if !errors.Is(err, tt.wantErr) {
-				t.Errorf("MovieRepository().FindByID() error is %v, want error is %v", err, tt.wantErr)
+				t.Errorf("MovieRepository.FindByID() error is %v, want error is %v", err, tt.wantErr)
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("MovieRepository.FindByID() got is %v, want is %v", got, tt.want)
@@ -76,30 +54,7 @@ func TestMovieRepository_FindByID(t *testing.T) {
 }
 
 func TestMovieRepository_Create(t *testing.T) {
-	db, cleanup, err := NewDB()
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := cleanup(); err != nil {
-			t.Fatal(err)
-		}
-	})
-
-	movie := &movieDTO{
-		ID:            "existing_movie_id",
-		Title:         "RRR",
-		ReleaseDate:   time.Date(2022, 10, 21, 0, 0, 0, 0, time.UTC),
-		ReleaseStatus: "NOW OPEN",
-	}
-	if _, err := db.NamedExec("INSERT movies (id, title, release_date, release_status) VALUES (:id, :title, :release_date, :release_status)", movie); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if _, err := db.NamedExec("DELETE FROM movies WHERE id = :id", movie); err != nil {
-			t.Fatal(err)
-		}
-	})
+	db := prepareTestMovieRepository(t)
 
 	tests := []struct {
 		name    string
@@ -144,30 +99,7 @@ func TestMovieRepository_Create(t *testing.T) {
 }
 
 func TestMovieRepository_Update(t *testing.T) {
-	db, cleanup, err := NewDB()
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := cleanup(); err != nil {
-			t.Fatal(err)
-		}
-	})
-
-	movie := &movieDTO{
-		ID:            "existing_movie_id",
-		Title:         "RRR",
-		ReleaseDate:   time.Date(2022, 10, 21, 0, 0, 0, 0, time.UTC),
-		ReleaseStatus: "NOW OPEN",
-	}
-	if _, err := db.NamedExec("INSERT movies (id, title, release_date, release_status) VALUES (:id, :title, :release_date, :release_status)", movie); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if _, err := db.NamedExec("DELETE FROM movies WHERE id = :id", movie); err != nil {
-			t.Fatal(err)
-		}
-	})
+	db := prepareTestMovieRepository(t)
 
 	tests := []struct {
 		name    string
@@ -194,4 +126,34 @@ func TestMovieRepository_Update(t *testing.T) {
 			}
 		})
 	}
+}
+
+func prepareTestMovieRepository(t *testing.T) *sqlx.DB {
+	t.Helper()
+	db, cleanup, err := NewDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := cleanup(); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	movie := &movieDTO{
+		ID:            "existing_movie_id",
+		Title:         "RRR",
+		ReleaseDate:   time.Date(2022, 10, 21, 0, 0, 0, 0, time.UTC),
+		ReleaseStatus: "NOW OPEN",
+	}
+	if _, err := db.NamedExec("INSERT INTO movies (id, title, release_date, release_status) VALUES (:id, :title, :release_date, :release_status)", movie); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if _, err := db.NamedExec("DELETE FROM movies WHERE id = :id", movie); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	return db
 }
