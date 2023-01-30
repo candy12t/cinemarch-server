@@ -14,7 +14,7 @@ type MovieHandler struct {
 	movieUC usecase.Movie
 }
 
-func NewMovie(movieUC usecase.Movie) *MovieHandler {
+func NewMovieHandler(movieUC usecase.Movie) *MovieHandler {
 	return &MovieHandler{
 		movieUC: movieUC,
 	}
