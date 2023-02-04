@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-type ScreeningMovie struct {
+type ScreenMovie struct {
 	ID        UUID
 	CinemaID  UUID
 	MovieID   UUID
@@ -10,8 +10,8 @@ type ScreeningMovie struct {
 	EndTime   time.Time
 }
 
-func NewScreeningMovie(cinemaID, movieID UUID, startTime, endTime time.Time) *ScreeningMovie {
-	return &ScreeningMovie{
+func NewScreenMovie(cinemaID, movieID UUID, startTime, endTime time.Time) *ScreenMovie {
+	return &ScreenMovie{
 		ID:        NewUUID(),
 		CinemaID:  cinemaID,
 		MovieID:   movieID,

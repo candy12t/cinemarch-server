@@ -12,7 +12,7 @@ var (
 	ErrInvalidLengthCinemaAddress = errors.New("address name must be 1-255 characters")
 	ErrInvalidLengthCinemaURL     = errors.New("cinema url must be 1-255 characters")
 
-	ErrInvalidLengthScreeningTypeName = errors.New("screening type name must be 1-255 characters")
+	ErrInvalidLengthScreenTypeName = errors.New("screen type name must be 1-255 characters")
 
 	ErrMovieNotFound       = errors.New("movie not found")
 	ErrMovieAlreadyExisted = errors.New("movie has already existed")
@@ -20,9 +20,9 @@ var (
 	ErrCinemaNotFound       = errors.New("cinema not found")
 	ErrCinemaAlreadyExisted = errors.New("cinema has already existed")
 
-	ErrScreeningMovieNotFound       = errors.New("screening movie not found")
-	ErrScreeningMovieAlreadyExisted = errors.New("screening movie has already existed")
+	ErrScreenMovieNotFound       = errors.New("screen movie not found")
+	ErrScreenMovieAlreadyExisted = errors.New("screen movie has already existed")
 
-	ErrScreeningTypeNotFound       = errors.New("screening type not found")
-	ErrScreeningTypeAlreadyExisted = errors.New("screening type has already existed")
+	ErrScreenTypeNotFound       = errors.New("screen type not found")
+	ErrScreenTypeAlreadyExisted = errors.New("screen type has already existed")
 )
