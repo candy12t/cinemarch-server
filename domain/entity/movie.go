@@ -49,7 +49,7 @@ func (m *Movie) isBeforeReleaseDate() bool {
 type MovieTitle string
 
 func NewMovieTitle(title string) (MovieTitle, error) {
-	if title == "" || len([]rune(title)) > 255 {
+	if title == "" || len([]rune(title)) > 64 {
 		return "", ErrInvalidLengthMovieTitle
 	}
 	return MovieTitle(title), nil
@@ -85,13 +85,9 @@ func (rs ReleaseStatus) String() string {
 var dateFormat = "2006-01-02"
 
 func NewMovieReleaseDate(releaseDate string) (time.Time, error) {
-	date, err := parseDate(releaseDate)
+	date, err := time.Parse(dateFormat, releaseDate)
 	if err != nil {
 		return time.Time{}, err
 	}
 	return date, nil
-}
-
-func parseDate(date string) (time.Time, error) {
-	return time.Parse(dateFormat, date)
 }

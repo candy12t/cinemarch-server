@@ -30,7 +30,7 @@ func TestNewCinemaName(t *testing.T) {
 	}
 }
 
-func TestNewCinemaAddress(t *testing.T) {
+func TestNewAddress(t *testing.T) {
 	tests := []struct {
 		name          string
 		cinemaAddress string
@@ -45,7 +45,7 @@ func TestNewCinemaAddress(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := entity.NewCinemaAddress(tt.cinemaAddress)
+			_, err := entity.NewAddress(tt.cinemaAddress)
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("NewCinemaAddress() error is %v, want error is %v", err, tt.wantErr)
 			}
@@ -53,7 +53,7 @@ func TestNewCinemaAddress(t *testing.T) {
 	}
 }
 
-func TestNewCinemaURL(t *testing.T) {
+func TestNewWebSiteURL(t *testing.T) {
 	tests := []struct {
 		name      string
 		cinemaURL string
@@ -68,7 +68,7 @@ func TestNewCinemaURL(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := entity.NewCinemaURL(tt.cinemaURL)
+			_, err := entity.NewWebSiteURL(tt.cinemaURL)
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("NewCinemaURL() error is %v, want error is %v", err, tt.wantErr)
 			}

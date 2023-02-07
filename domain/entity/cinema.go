@@ -3,61 +3,63 @@ package entity
 import "net/url"
 
 type Cinema struct {
-	ID      UUID
-	Name    CinemaName
-	Address CinemaAddress
-	URL     CinemaURL
+	ID         UUID
+	Name       CinemaName
+	Prefecture Prefecture
+	Address    Address
+	WebSiteURL WebSiteURL
 }
 
-func NewCinema(name CinemaName, address CinemaAddress, _url CinemaURL) *Cinema {
+func NewCinema(name CinemaName, prefecure Prefecture, address Address, webSiteURL WebSiteURL) *Cinema {
 	return &Cinema{
-		ID:      NewUUID(),
-		Name:    name,
-		Address: address,
-		URL:     _url,
+		ID:         NewUUID(),
+		Name:       name,
+		Prefecture: prefecure,
+		Address:    address,
+		WebSiteURL: webSiteURL,
 	}
 }
 
 type CinemaName string
 
 func NewCinemaName(name string) (CinemaName, error) {
-	if name == "" || len([]rune(name)) > 255 {
+	if name == "" || len([]rune(name)) > 64 {
 		return "", ErrInvalidLengthCinemaName
 	}
 	return CinemaName(name), nil
 }
 
-func (cn CinemaName) String() string {
-	return string(cn)
+func (c CinemaName) String() string {
+	return string(c)
 }
 
-type CinemaAddress string
+type Address string
 
-func NewCinemaAddress(address string) (CinemaAddress, error) {
+func NewAddress(address string) (Address, error) {
 	if address == "" || len([]rune(address)) > 255 {
-		return "", ErrInvalidLengthCinemaAddress
+		return "", ErrInvalidLengthAddress
 	}
-	return CinemaAddress(address), nil
+	return Address(address), nil
 }
 
-func (ca CinemaAddress) String() string {
-	return string(ca)
+func (a Address) String() string {
+	return string(a)
 }
 
-type CinemaURL string
+type WebSiteURL string
 
-func NewCinemaURL(urlStr string) (CinemaURL, error) {
+func NewWebSiteURL(urlStr string) (WebSiteURL, error) {
 	u, err := url.Parse(urlStr)
 	if err != nil {
 		return "", err
 	}
 
 	if u.String() == "" || len([]rune(u.String())) > 255 {
-		return "", ErrInvalidLengthCinemaURL
+		return "", ErrInvalidLengthWebSiteURL
 	}
-	return CinemaURL(u.String()), nil
+	return WebSiteURL(u.String()), nil
 }
 
-func (c CinemaURL) String() string {
-	return string(c)
+func (w WebSiteURL) String() string {
+	return string(w)
 }

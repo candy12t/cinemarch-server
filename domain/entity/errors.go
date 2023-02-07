@@ -3,16 +3,16 @@ package entity
 import "errors"
 
 var (
+	ErrInvalidLengthCinemaName = errors.New("cinema name must be 1-64 characters")
+	ErrInvalidLengthAddress    = errors.New("address must be 1-255 characters")
+	ErrInvalidLengthWebSiteURL = errors.New("web site url must be 1-255 characters")
+
+	ErrInvalidLengthMovieTitle          = errors.New("movie title must be 1-64 characters")
 	ErrInvalidReleaseStatus             = errors.New("invalid release status")
 	ErrNotAllowChangeMovieReleaseStatus = errors.New("not allow change release status")
 
-	ErrInvalidLengthMovieTitle = errors.New("movie title must be 1-255 characters")
-
-	ErrInvalidLengthCinemaName    = errors.New("cinema name must be 1-255 characters")
-	ErrInvalidLengthCinemaAddress = errors.New("address name must be 1-255 characters")
-	ErrInvalidLengthCinemaURL     = errors.New("cinema url must be 1-255 characters")
-
-	ErrInvalidLengthScreenTypeName = errors.New("screen type name must be 1-255 characters")
+	ErrInvalidScreenType        = errors.New("invalid screen type")
+	ErrInvalidSubtitleOrDubbing = errors.New("invalid")
 
 	ErrMovieNotFound       = errors.New("movie not found")
 	ErrMovieAlreadyExisted = errors.New("movie has already existed")
