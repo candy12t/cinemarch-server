@@ -2,22 +2,24 @@ BIN := bin/cinemarch
 
 ENV_LOCAL_FILE := ./env.local
 ENV_LOCAL = $(shell cat $(ENV_LOCAL_FILE))
+ENV_TEST_FILE := ./env.test
+ENV_TEST = $(shell cat $(ENV_LOCAL_FILE))
 
 .PHONY: build
 build: test clean
-	go build -o $(BIN) -v ./cmd/cinemarch
+	go build -o $(BIN) -v ./cmd/cinemarch-server
 
 .PHONY: serve
 serve:
-	$(ENV_LOCAL) go run ./cmd/cinemarch/main.go
+	$(ENV_LOCAL) go run ./cmd/cinemarch-server/main.go
 
 .PHONY: test
 test:
-	$(ENV_LOCAL) go test ./... -count=1 --race -v
+	$(ENV_TEST) go test ./... -count=1 --race
 
 .PHONY: test-with-coverage
 test-with-coverage:
-	$(ENV_LOCAL) go test ./... -count=1 --race -v -coverprofile=profile.out && \
+	$(ENV_TEST) go test ./... -count=1 --race -coverprofile=profile.out && \
 		go tool cover -html=profile.out && \
 		rm -rf profile.out
 
@@ -46,3 +48,7 @@ stop-local-db:
 .PHONY: delete-local-db
 delete-local-db:
 	docker compose down -v
+
+.PHONY: generate
+generate:
+	go generate ./...
