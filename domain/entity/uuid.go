@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type UUID string
 
-func NewUUID() UUID {
+var NewUUID = func() UUID {
 	return UUID(uuid.New().String())
 }
 

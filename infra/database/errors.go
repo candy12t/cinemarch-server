@@ -1,3 +1,3 @@
 package database
 
-var MySQLDuplicateEntryErrorCode uint16 = 1062
+var mysqlDuplicateEntryErrorCode uint16 = 1062

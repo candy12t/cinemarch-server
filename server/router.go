@@ -12,8 +12,9 @@ import (
 
 var uuidRegexpPattern = `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
 
-func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema) http.Handler {
+func NewRouter(movieUC usecase.Movie) http.Handler {
 	r := chi.NewRouter()
+
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RealIP)
@@ -23,16 +24,9 @@ func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema) http.Handler {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/movies", func(r chi.Router) {
 			h := handler.NewMovieHandler(movieUC)
-			r.Post("/", h.Create)
+			r.Put("/", h.Upsert)
+			r.Get("/search", h.Search)
 			r.Route(fmt.Sprintf("/{movieID:%s}", uuidRegexpPattern), func(r chi.Router) {
-				r.Get("/", h.Show)
-			})
-		})
-
-		r.Route("/cinemas", func(r chi.Router) {
-			h := handler.NewCinemaHandler(cinemaUC)
-			r.Post("/", h.Create)
-			r.Route(fmt.Sprintf("/{cinemaID:%s}", uuidRegexpPattern), func(r chi.Router) {
 				r.Get("/", h.Show)
 			})
 		})

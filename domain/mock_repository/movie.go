@@ -64,6 +64,36 @@ func (mr *MockMovieMockRecorder) FindByID(ctx, movieID interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockMovie)(nil).FindByID), ctx, movieID)
 }
 
+// FindByTitle mocks base method.
+func (m *MockMovie) FindByTitle(ctx context.Context, title entity.MovieTitle) (*entity.Movie, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByTitle", ctx, title)
+	ret0, _ := ret[0].(*entity.Movie)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByTitle indicates an expected call of FindByTitle.
+func (mr *MockMovieMockRecorder) FindByTitle(ctx, title interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByTitle", reflect.TypeOf((*MockMovie)(nil).FindByTitle), ctx, title)
+}
+
+// Search mocks base method.
+func (m *MockMovie) Search(ctx context.Context, conditionQuery string, args []any) (entity.Movies, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", ctx, conditionQuery, args)
+	ret0, _ := ret[0].(entity.Movies)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockMovieMockRecorder) Search(ctx, conditionQuery, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockMovie)(nil).Search), ctx, conditionQuery, args)
+}
+
 // Update mocks base method.
 func (m *MockMovie) Update(ctx context.Context, movie *entity.Movie) error {
 	m.ctrl.T.Helper()

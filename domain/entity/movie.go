@@ -13,6 +13,8 @@ type Movie struct {
 	ReleaseStatus ReleaseStatus
 }
 
+type Movies []*Movie
+
 func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus ReleaseStatus) *Movie {
 	return &Movie{
 		ID:            NewUUID(),
@@ -22,17 +24,21 @@ func NewMovie(title MovieTitle, releaseDate time.Time, releaseStatus ReleaseStat
 	}
 }
 
+// ComingSoon -> NowOpen
+// NowOpen    -> Released
+// Released   -> NowOpen
+
 func (m *Movie) ToNowOpen() error {
-	if m.isBeforeReleaseDate() {
-		return ErrNotAllowChangeMovieReleaseStatus
+	if !m.isToNowOpen() || m.isBeforeReleaseDate() {
+		return ErrNotChangeReleaseStatus
 	}
 	m.ReleaseStatus = NowOpen
 	return nil
 }
 
 func (m *Movie) ToReleased() error {
-	if m.ReleaseStatus != NowOpen {
-		return ErrNotAllowChangeMovieReleaseStatus
+	if !m.isToReleased() {
+		return ErrNotChangeReleaseStatus
 	}
 	m.ReleaseStatus = Released
 	return nil
@@ -42,6 +48,14 @@ func (m *Movie) UpdateReleaseDate(releaseDate time.Time) {
 	m.ReleaseDate = releaseDate
 }
 
+func (m *Movie) isToNowOpen() bool {
+	return m.ReleaseStatus == ComingSoon || m.ReleaseStatus == Released
+}
+
+func (m *Movie) isToReleased() bool {
+	return m.ReleaseStatus == NowOpen
+}
+
 func (m *Movie) isBeforeReleaseDate() bool {
 	return lib.TimeNow().Before(m.ReleaseDate)
 }
@@ -49,7 +63,7 @@ func (m *Movie) isBeforeReleaseDate() bool {
 type MovieTitle string
 
 func NewMovieTitle(title string) (MovieTitle, error) {
-	if title == "" || len([]rune(title)) > 64 {
+	if title == "" || len([]rune(title)) > 128 {
 		return "", ErrInvalidLengthMovieTitle
 	}
 	return MovieTitle(title), nil
@@ -80,14 +94,4 @@ func NewReleaseStatus(releaseStatus string) (ReleaseStatus, error) {
 
 func (rs ReleaseStatus) String() string {
 	return string(rs)
-}
-
-var dateFormat = "2006-01-02"
-
-func NewMovieReleaseDate(releaseDate string) (time.Time, error) {
-	date, err := time.Parse(dateFormat, releaseDate)
-	if err != nil {
-		return time.Time{}, err
-	}
-	return date, nil
 }
