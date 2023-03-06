@@ -9,5 +9,6 @@ import (
 
 type Cinema interface {
 	FindByID(ctx context.Context, cinemaID entity.UUID) (*entity.Cinema, error)
+	FindAllByPrefecture(ctx context.Context, prefecture entity.Prefecture) (entity.Cinemas, error)
 	Create(ctx context.Context, cinema *entity.Cinema) error
 }

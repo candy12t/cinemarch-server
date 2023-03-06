@@ -8,7 +8,7 @@ import (
 )
 
 type Cinema interface {
-	Show(ctx context.Context, cinemaID string) (*CinemaDTO, error)
+	FindByID(ctx context.Context, cinemaID string) (*CinemaDTO, error)
 	Create(ctx context.Context, params CreateCinemaParams) (*CinemaDTO, error)
 }
 
@@ -24,12 +24,12 @@ func NewCinemaUseCase(cinemaRepo repository.Cinema) *CinemaUseCase {
 	}
 }
 
-func (u *CinemaUseCase) Show(ctx context.Context, cinemaID string) (*CinemaDTO, error) {
+func (u *CinemaUseCase) FindByID(ctx context.Context, cinemaID string) (*CinemaDTO, error) {
 	cinema, err := u.cinemaRepo.FindByID(ctx, entity.UUID(cinemaID))
 	if err != nil {
 		return nil, err
 	}
-	return u.cinemaToDTO(cinema), nil
+	return cinemaToDTO(cinema), nil
 }
 
 func (u *CinemaUseCase) Create(ctx context.Context, params CreateCinemaParams) (*CinemaDTO, error) {
@@ -37,42 +37,49 @@ func (u *CinemaUseCase) Create(ctx context.Context, params CreateCinemaParams) (
 	if err != nil {
 		return nil, err
 	}
-
+	prefecture, err := entity.NewPrefecture(params.Prefecture)
+	if err != nil {
+		return nil, err
+	}
 	address, err := entity.NewCinemaAddress(params.Address)
 	if err != nil {
 		return nil, err
 	}
-
-	url, err := entity.NewCinemaURL(params.URL)
+	webSite, err := entity.NewCinemaWebSite(params.WebSite)
 	if err != nil {
 		return nil, err
 	}
 
-	cinema := entity.NewCinema(name, address, url)
+	cinema := entity.NewCinema(name, prefecture, address, webSite)
 	if err := u.cinemaRepo.Create(ctx, cinema); err != nil {
 		return nil, err
 	}
-	return u.cinemaToDTO(cinema), nil
+	return cinemaToDTO(cinema), nil
 }
 
 type CreateCinemaParams struct {
-	Name    string
-	Address string
-	URL     string
+	Name       string
+	Prefecture string
+	Address    string
+	WebSite    string
 }
 
 type CinemaDTO struct {
-	ID      string
-	Name    string
-	Address string
-	URL     string
+	ID         string
+	Name       string
+	Prefecture string
+	Address    string
+	WebSite    string
 }
 
-func (u *CinemaUseCase) cinemaToDTO(cinema *entity.Cinema) *CinemaDTO {
+type CinemaDTOs []*CinemaDTO
+
+func cinemaToDTO(cinema *entity.Cinema) *CinemaDTO {
 	return &CinemaDTO{
-		ID:      cinema.ID.String(),
-		Name:    cinema.Name.String(),
-		Address: cinema.Address.String(),
-		URL:     cinema.URL.String(),
+		ID:         cinema.ID.String(),
+		Name:       cinema.Name.String(),
+		Prefecture: cinema.Prefecture.String(),
+		Address:    cinema.Address.String(),
+		WebSite:    cinema.WebSite.String(),
 	}
 }

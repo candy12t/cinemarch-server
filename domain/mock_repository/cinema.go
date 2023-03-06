@@ -49,6 +49,21 @@ func (mr *MockCinemaMockRecorder) Create(ctx, cinema interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCinema)(nil).Create), ctx, cinema)
 }
 
+// FindAllByPrefecture mocks base method.
+func (m *MockCinema) FindAllByPrefecture(ctx context.Context, prefecture entity.Prefecture) (entity.Cinemas, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAllByPrefecture", ctx, prefecture)
+	ret0, _ := ret[0].(entity.Cinemas)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAllByPrefecture indicates an expected call of FindAllByPrefecture.
+func (mr *MockCinemaMockRecorder) FindAllByPrefecture(ctx, prefecture interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllByPrefecture", reflect.TypeOf((*MockCinema)(nil).FindAllByPrefecture), ctx, prefecture)
+}
+
 // FindByID mocks base method.
 func (m *MockCinema) FindByID(ctx context.Context, cinemaID entity.UUID) (*entity.Cinema, error) {
 	m.ctrl.T.Helper()
