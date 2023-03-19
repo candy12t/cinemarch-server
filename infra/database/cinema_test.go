@@ -54,6 +54,50 @@ func TestCinemaRepository_FindByID(t *testing.T) {
 	}
 }
 
+func TestCinemaRepository_FindByName(t *testing.T) {
+	db := prepareTestCinemaRepository(t)
+	tests := []struct {
+		name       string
+		cinemaName entity.CinemaName
+		want       *entity.Cinema
+		wantErr    error
+	}{
+		{
+			name:       "get existing cinema",
+			cinemaName: "existing_cinema_name",
+			want: &entity.Cinema{
+				ID:         "existing_cinema_id",
+				Name:       "existing_cinema_name",
+				Prefecture: "東京都",
+				Address:    "東京都新宿区新宿1-1-1",
+				WebSite:    "https://example.com",
+			},
+			wantErr: nil,
+		},
+		{
+			name:       "cinema not found",
+			cinemaName: "not_exist_cinema_name",
+			want:       nil,
+			wantErr:    entity.ErrCinemaNotFound,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := NewCinemaRepository(db)
+			got, err := repo.FindByName(context.Background(), tt.cinemaName)
+			if err != nil {
+				if !errors.Is(err, tt.wantErr) {
+					t.Errorf("CinemaRepository.FindByName() error is %v, wantErr is %v", err, tt.wantErr)
+					return
+				}
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CinemaRepository.FindByName() got is %v, want is %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestCinemaRepository_FindAllByPrefeccture(t *testing.T) {
 	db := prepareTestCinemaRepository(t)
 	tests := []struct {

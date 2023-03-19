@@ -78,3 +78,18 @@ func (mr *MockCinemaMockRecorder) FindByID(ctx, cinemaID interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockCinema)(nil).FindByID), ctx, cinemaID)
 }
+
+// FindByName mocks base method.
+func (m *MockCinema) FindByName(ctx context.Context, cinemaName entity.CinemaName) (*entity.Cinema, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByName", ctx, cinemaName)
+	ret0, _ := ret[0].(*entity.Cinema)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByName indicates an expected call of FindByName.
+func (mr *MockCinemaMockRecorder) FindByName(ctx, cinemaName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockCinema)(nil).FindByName), ctx, cinemaName)
+}

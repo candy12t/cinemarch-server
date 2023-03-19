@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/candy12t/cinemarch-server/domain/entity"
 	"github.com/candy12t/cinemarch-server/domain/repository"
@@ -24,9 +25,17 @@ func NewCinemaRepository(db *sqlx.DB) *CinemaRepository {
 }
 
 func (r *CinemaRepository) FindByID(ctx context.Context, cinemaID entity.UUID) (*entity.Cinema, error) {
+	return r.find(ctx, "id", cinemaID)
+}
+
+func (r *CinemaRepository) FindByName(ctx context.Context, cinemaName entity.CinemaName) (*entity.Cinema, error) {
+	return r.find(ctx, "name", cinemaName)
+}
+
+func (r *CinemaRepository) find(ctx context.Context, column string, arg any) (*entity.Cinema, error) {
 	dto := new(cinemaDTO)
-	query := `SELECT id, name, prefecture, address, web_site FROM cinemas WHERE id = ?`
-	if err := r.db.GetContext(ctx, dto, query, cinemaID); err != nil {
+	query := fmt.Sprintf(`SELECT id, name, prefecture, address, web_site FROM cinemas WHERE %s = ?`, column)
+	if err := r.db.GetContext(ctx, dto, query, arg); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, entity.ErrCinemaNotFound
 		}
