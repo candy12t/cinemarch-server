@@ -8,6 +8,8 @@ import (
 )
 
 type ScreenMovie interface {
-	FindByID(ctx context.Context, screenMovieID entity.UUID) (*entity.ScreenMovie, error)
-	Create(ctx context.Context, screenMovie *entity.ScreenMovie) error
+	FindByUniqKey(ctx context.Context, cinemaID, movieID entity.UUID, screenType entity.ScreenType, translateType entity.TranslateType, threeD bool) (*entity.ScreenMovie, error)
+	Search(ctx context.Context) (entity.ScreenMovies, error)
+	CreateScreenMovie(ctx context.Context, screenMovie *entity.ScreenMovie) error
+	CreateScreenSchedules(ctx context.Context, screenSchedule entity.ScreenSchedules) error
 }

@@ -9,11 +9,13 @@ type ScreenSchedule struct {
 	EndTime       time.Time
 }
 
-func NewScreenSchedule(screen_movie_id UUID, start_time, end_time time.Time) *ScreenSchedule {
+type ScreenSchedules []*ScreenSchedule
+
+func NewScreenSchedule(screenMovieID UUID, startTime, endTime time.Time) *ScreenSchedule {
 	return &ScreenSchedule{
 		ID:            NewUUID(),
-		ScreenMovieID: screen_movie_id,
-		StartTime:     start_time,
-		EndTime:       end_time,
+		ScreenMovieID: screenMovieID,
+		StartTime:     startTime,
+		EndTime:       endTime,
 	}
 }

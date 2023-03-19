@@ -35,31 +35,60 @@ func (m *MockScreenMovie) EXPECT() *MockScreenMovieMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
-func (m *MockScreenMovie) Create(ctx context.Context, screenMovie *entity.ScreenMovie) error {
+// CreateScreenMovie mocks base method.
+func (m *MockScreenMovie) CreateScreenMovie(ctx context.Context, screenMovie *entity.ScreenMovie) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, screenMovie)
+	ret := m.ctrl.Call(m, "CreateScreenMovie", ctx, screenMovie)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// Create indicates an expected call of Create.
-func (mr *MockScreenMovieMockRecorder) Create(ctx, screenMovie interface{}) *gomock.Call {
+// CreateScreenMovie indicates an expected call of CreateScreenMovie.
+func (mr *MockScreenMovieMockRecorder) CreateScreenMovie(ctx, screenMovie interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockScreenMovie)(nil).Create), ctx, screenMovie)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateScreenMovie", reflect.TypeOf((*MockScreenMovie)(nil).CreateScreenMovie), ctx, screenMovie)
 }
 
-// FindByID mocks base method.
-func (m *MockScreenMovie) FindByID(ctx context.Context, screenMovieID entity.UUID) (*entity.ScreenMovie, error) {
+// CreateScreenSchedules mocks base method.
+func (m *MockScreenMovie) CreateScreenSchedules(ctx context.Context, screenSchedule entity.ScreenSchedules) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByID", ctx, screenMovieID)
+	ret := m.ctrl.Call(m, "CreateScreenSchedules", ctx, screenSchedule)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateScreenSchedules indicates an expected call of CreateScreenSchedules.
+func (mr *MockScreenMovieMockRecorder) CreateScreenSchedules(ctx, screenSchedule interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateScreenSchedules", reflect.TypeOf((*MockScreenMovie)(nil).CreateScreenSchedules), ctx, screenSchedule)
+}
+
+// FindByUniqKey mocks base method.
+func (m *MockScreenMovie) FindByUniqKey(ctx context.Context, cinemaID, movieID entity.UUID, screenType entity.ScreenType, translateType entity.TranslateType, threeD bool) (*entity.ScreenMovie, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByUniqKey", ctx, cinemaID, movieID, screenType, translateType, threeD)
 	ret0, _ := ret[0].(*entity.ScreenMovie)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByID indicates an expected call of FindByID.
-func (mr *MockScreenMovieMockRecorder) FindByID(ctx, screenMovieID interface{}) *gomock.Call {
+// FindByUniqKey indicates an expected call of FindByUniqKey.
+func (mr *MockScreenMovieMockRecorder) FindByUniqKey(ctx, cinemaID, movieID, screenType, translateType, threeD interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockScreenMovie)(nil).FindByID), ctx, screenMovieID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUniqKey", reflect.TypeOf((*MockScreenMovie)(nil).FindByUniqKey), ctx, cinemaID, movieID, screenType, translateType, threeD)
+}
+
+// Search mocks base method.
+func (m *MockScreenMovie) Search(ctx context.Context) (entity.ScreenMovies, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", ctx)
+	ret0, _ := ret[0].(entity.ScreenMovies)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockScreenMovieMockRecorder) Search(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockScreenMovie)(nil).Search), ctx)
 }

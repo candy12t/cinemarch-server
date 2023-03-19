@@ -1,75 +1,47 @@
 package entity
 
 type ScreenMovie struct {
-	ID                UUID
-	CinemaID          UUID
-	MovieID           UUID
-	ScreenType        ScreenType
-	SubtitleOrDubbing SubtitleOrDubbing
-	ThreeD            bool
-	Schedules         []*ScreenSchedule
+	ID              UUID
+	CinemaID        UUID
+	MovieID         UUID
+	ScreenType      ScreenType
+	TranslateType   TranslateType
+	TreeD           bool
+	ScreenSchedules ScreenSchedules
 }
 
-func NewScreenMovie(cinemaID, movieID UUID, screenType ScreenType, subOrDub SubtitleOrDubbing, threeD bool) *ScreenMovie {
+type ScreenMovies []*ScreenMovie
+
+func NewScreenMovie(cinemaID, movieID UUID, screenType ScreenType, translateType TranslateType, treeD bool) *ScreenMovie {
 	return &ScreenMovie{
-		ID:                NewUUID(),
-		CinemaID:          cinemaID,
-		MovieID:           movieID,
-		ScreenType:        screenType,
-		SubtitleOrDubbing: subOrDub,
-		ThreeD:            threeD,
+		ID:            NewUUID(),
+		CinemaID:      cinemaID,
+		MovieID:       movieID,
+		ScreenType:    screenType,
+		TranslateType: translateType,
+		TreeD:         treeD,
 	}
 }
 
-type ScreenType string
+type TranslateType string
 
 const (
-	IMAX         ScreenType = "IMAX"
-	IMAXLaser    ScreenType = "IMAX Laser"
-	IMAXLaserGT  ScreenType = "IMAX Laser/GT Technology"
-	DolbyAtmos   ScreenType = "DolbyAtmos"
-	DolbyCinema  ScreenType = "DolbyCinema"
-	FourDX       ScreenType = "4DX"
-	MX4D         ScreenType = "MX4D"
-	ScreenX      ScreenType = "ScreenX"
-	FourDXScreen ScreenType = "4DXScreen"
-	BESTIA       ScreenType = "BESTIA"
+	Subtitle TranslateType = "Subtitle"
+	Dubbing  TranslateType = "Dubbing"
+	Original TranslateType = "Original"
 )
 
-var screenTypes = []ScreenType{IMAX, IMAXLaser, IMAXLaserGT, DolbyAtmos, DolbyCinema, FourDX, MX4D, ScreenX, FourDXScreen, BESTIA}
+var translateTypes = []TranslateType{Subtitle, Dubbing, Original}
 
-func NewScreenType(screenType string) (ScreenType, error) {
-	for _, st := range screenTypes {
-		if st.String() == screenType {
-			return st, nil
+func NewTranslateType(translateType string) (TranslateType, error) {
+	for _, tt := range translateTypes {
+		if tt.String() == translateType {
+			return tt, nil
 		}
 	}
-	return "", ErrInvalidScreenType
+	return "", ErrInvalidTranslateType
 }
 
-func (st ScreenType) String() string {
-	return string(st)
-}
-
-type SubtitleOrDubbing string
-
-const (
-	Subtitle SubtitleOrDubbing = "Subtitle"
-	Dubbing  SubtitleOrDubbing = "Dubbing"
-	Neither  SubtitleOrDubbing = "Neither"
-)
-
-var subtitleOrDubbings = []SubtitleOrDubbing{Subtitle, Dubbing, Neither}
-
-func NewSubtitleOrDubbing(subOrDub string) (SubtitleOrDubbing, error) {
-	for _, sd := range subtitleOrDubbings {
-		if sd.String() == subOrDub {
-			return sd, nil
-		}
-	}
-	return "", ErrInvalidSubtitleOrDubbing
-}
-
-func (sd SubtitleOrDubbing) String() string {
-	return string(sd)
+func (tt TranslateType) String() string {
+	return string(tt)
 }
