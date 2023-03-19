@@ -27,7 +27,10 @@ func main() {
 	cinemaRepo := database.NewCinemaRepository(db)
 	cinemaUC := usecase.NewCinemaUseCase(cinemaRepo)
 
-	r := server.NewRouter(movieUC, cinemaUC)
+	screenMovieRepo := database.NewScreenMovieRepository(db)
+	screenMovieUC := usecase.NewScreenMovieUseCase(cinemaRepo, movieRepo, screenMovieRepo)
+
+	r := server.NewRouter(movieUC, cinemaUC, screenMovieUC)
 	addr := fmt.Sprintf(":%s", config.HTTPPort())
 	if err := server.NewServer(addr, r).Run(); err != nil {
 		log.Fatal(err)

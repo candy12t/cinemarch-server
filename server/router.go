@@ -12,7 +12,7 @@ import (
 
 var uuidRegexpPattern = `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
 
-func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema) http.Handler {
+func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema, screenMovieUC usecase.ScreenMovie) http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -26,8 +26,14 @@ func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema) http.Handler {
 			h := handler.NewMovieHandler(movieUC)
 			r.Put("/", h.Upsert)
 			r.Get("/search", h.Search)
+
 			r.Route(fmt.Sprintf("/{movieID:%s}", uuidRegexpPattern), func(r chi.Router) {
 				r.Get("/", h.Show)
+
+				r.Route("/screen_movies", func(r chi.Router) {
+					h := handler.NewScreenMovieHandler(screenMovieUC)
+					r.Post("/", h.Create)
+				})
 			})
 		})
 
