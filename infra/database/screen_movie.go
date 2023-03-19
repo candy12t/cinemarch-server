@@ -2,13 +2,10 @@ package database
 
 import (
 	"context"
-	"database/sql"
-	"errors"
 	"time"
 
 	"github.com/candy12t/cinemarch-server/domain/entity"
 	"github.com/candy12t/cinemarch-server/domain/repository"
-	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -23,57 +20,62 @@ func NewScreenMovieRepository(db *sqlx.DB) *ScreenMovieRepository {
 		db: db,
 	}
 }
-
-func (r *ScreenMovieRepository) FindByID(ctx context.Context, screenMovieID entity.UUID) (*entity.ScreenMovie, error) {
-	dto := new(screenMovieDTO)
-	query := `SELECT id, cinema_id, movie_id, start_time, end_time FROM screen_movies WHERE id = ?`
-	if err := r.db.GetContext(ctx, dto, query, screenMovieID); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, entity.ErrScreenMovieNotFound
-		}
-		return nil, err
-	}
-	return r.dtoToScreenMovie(dto), nil
+func (r *ScreenMovieRepository) FindByUniqKey(ctx context.Context, cinemaID, movieID entity.UUID, screenType entity.ScreenType, translateType entity.TranslateType, threeD bool) (*entity.ScreenMovie, error) {
+	return nil, nil
 }
 
-func (r *ScreenMovieRepository) Create(ctx context.Context, screenMovie *entity.ScreenMovie) error {
-	dto := r.screenMovieToDTO(screenMovie)
-	query := `INSERT INTO screen_movies (id, cinema_id, movie_id, start_time, end_time) VALUES (:id, :cinema_id, :movie_id, :start_time, :end_time)`
-	_, err := r.db.NamedExecContext(ctx, query, dto)
-	if err != nil {
-		var mysqlErr *mysql.MySQLError
-		if errors.As(err, &mysqlErr); mysqlErr.Number == MySQLDuplicateEntryErrorCode {
-			return entity.ErrScreenMovieAlreadyExisted
-		}
-		return err
-	}
+func (r *ScreenMovieRepository) Search(ctx context.Context) (entity.ScreenMovies, error) {
+	// query := `
+	// 	SELECT
+	// 		screen_movies.id AS id,
+	// 		screen_movies.cinema_id AS cinema_id,
+	// 		screen_movies.movie_id AS movie_id,
+	// 		screen_movies.screen_type AS screen_type,
+	// 		screen_movies.translate_type AS translate_type,
+	// 		screen_movies.three_d AS three_d,
+	// 		schedules.start_time AS start_time,
+	// 		schedules.end_time AS end_time
+	// 	FROM
+	// 		screen_movies
+	// 	INNER JOIN screen_schedules AS schedules
+	// 		ON screen_movies.id = schedules.screen_movie_id
+	// `
+	return nil, nil
+}
+
+func (r *ScreenMovieRepository) CreateScreenMovie(ctx context.Context, screenMovie *entity.ScreenMovie) error {
+	return nil
+}
+
+func (r *ScreenMovieRepository) CreateScreenSchedules(ctx context.Context, screenSchedule entity.ScreenSchedules) error {
 	return nil
 }
 
 type screenMovieDTO struct {
-	ID        string    `db:"id"`
-	CinemaID  string    `db:"cinema_id"`
-	MovieID   string    `db:"movie_id"`
-	StartTime time.Time `db:"start_time"`
-	EndTime   time.Time `db:"end_time"`
+	ID            string    `db:"id"`
+	CinemaID      string    `db:"cinema_id"`
+	MovieID       string    `db:"movie_id"`
+	TranslateType string    `db:"translate_type"`
+	ScreenType    string    `db:"screen_type"`
+	ThreeD        bool      `db:"three_d"`
+	StartTime     time.Time `db:"start_time"`
+	EndTime       time.Time `db:"end_time"`
 }
 
-func (r *ScreenMovieRepository) screenMovieToDTO(screenMovie *entity.ScreenMovie) *screenMovieDTO {
-	return &screenMovieDTO{
-		ID:        screenMovie.ID.String(),
-		CinemaID:  screenMovie.CinemaID.String(),
-		MovieID:   screenMovie.MovieID.String(),
-		StartTime: screenMovie.StartTime,
-		EndTime:   screenMovie.EndTime,
+func dtoToScreenMovie(dto *screenMovieDTO) *entity.ScreenMovie {
+	return &entity.ScreenMovie{
+		ID:            entity.UUID(dto.ID),
+		CinemaID:      entity.UUID(dto.CinemaID),
+		MovieID:       entity.UUID(dto.MovieID),
+		TranslateType: entity.TranslateType(dto.TranslateType),
+		TreeD:         dto.ThreeD,
 	}
 }
 
-func (r *ScreenMovieRepository) dtoToScreenMovie(dto *screenMovieDTO) *entity.ScreenMovie {
-	return &entity.ScreenMovie{
-		ID:        entity.UUID(dto.ID),
-		CinemaID:  entity.UUID(dto.CinemaID),
-		MovieID:   entity.UUID(dto.MovieID),
-		StartTime: dto.StartTime,
-		EndTime:   dto.EndTime,
+func screenMovieToDTO(screenMovie *entity.ScreenMovie) *screenMovieDTO {
+	return &screenMovieDTO{
+		ID:       screenMovie.ID.String(),
+		CinemaID: screenMovie.CinemaID.String(),
+		MovieID:  screenMovie.MovieID.String(),
 	}
 }
