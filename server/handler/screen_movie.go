@@ -23,26 +23,33 @@ func (h *ScreenMovieHandler) Create(w http.ResponseWriter, r *http.Request) {
 		EndTime   string `json:"end_time"`
 	}
 	type reqJSON struct {
-		CinemaName      string           `json:"cinema_name"`
-		MovieTitle      string           `json:"movie_title"`
-		ScreenType      string           `json:"screen_type"`
-		TranslateType   string           `json:"translate_type"`
-		ThreeD          bool             `json:"three_d"`
-		ScreenSchedules []screenSchedule `json:"schedules"`
+		CinemaName      string            `json:"cinema_name"`
+		MovieTitle      string            `json:"movie_title"`
+		ScreenType      string            `json:"screen_type"`
+		TranslateType   string            `json:"translate_type"`
+		ThreeD          bool              `json:"three_d"`
+		ScreenSchedules []*screenSchedule `json:"schedules"`
 	}
 	req := new(reqJSON)
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		ResponseJSON(w, NewHTTPError(err.Error()), http.StatusBadRequest)
 		return
 	}
+	schedules := make([]*usecase.CreateScreenScheduleParams, 0, len(req.ScreenSchedules))
+	for _, schedule := range req.ScreenSchedules {
+		schedules = append(schedules, &usecase.CreateScreenScheduleParams{
+			StartTime: schedule.StartTime,
+			EndTime:   schedule.EndTime,
+		})
+	}
 	ctx := r.Context()
 	params := usecase.CreateScreenMovieParams{
-		CinemaName:    req.CinemaName,
-		MovieTitle:    req.MovieTitle,
-		ScreenType:    req.ScreenType,
-		TranslateType: req.TranslateType,
-		ThreeD:        req.ThreeD,
-		// ScreenSchedules: req.ScreenSchedules,
+		CinemaName:      req.CinemaName,
+		MovieTitle:      req.MovieTitle,
+		ScreenType:      req.ScreenType,
+		TranslateType:   req.TranslateType,
+		ThreeD:          req.ThreeD,
+		ScreenSchedules: schedules,
 	}
 	screenMovie, err := h.screenMovieUC.Create(ctx, params)
 	if err != nil {
