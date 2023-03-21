@@ -42,8 +42,8 @@ func TestParseJSTDateTimeInUTC(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name:    "2023-01-01 15:04",
-			value:   "2023-01-01 15:04",
+			name:    "2023-01-01 15:04:00",
+			value:   "2023-01-01 15:04:00",
 			want:    time.Date(2023, 1, 1, 6, 4, 0, 0, time.UTC),
 			wantErr: nil,
 		},
@@ -92,9 +92,9 @@ func TestFormatDateTimeInJST(t *testing.T) {
 		want  string
 	}{
 		{
-			name:  "2023-01-01 15:04",
+			name:  "2023-01-01 15:04:00",
 			value: time.Date(2023, 1, 1, 6, 4, 0, 0, time.UTC),
-			want:  "2023-01-01 15:04",
+			want:  "2023-01-01 15:04:00",
 		},
 	}
 
