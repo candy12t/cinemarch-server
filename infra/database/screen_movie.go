@@ -49,7 +49,7 @@ func (r *ScreenMovieRepository) FindByUniqKey(ctx context.Context, cinemaID, mov
 			AND screen_type = ?
 			AND translate_type = ?
 			AND three_d = ?
-		GROUP BY cinema_id, movie_id, screen_type, translate_type, three_d
+		GROUP BY id, cinema_id, movie_id, screen_type, translate_type, three_d
 	`
 	if err := r.db.GetContext(ctx, dto, query, cinemaID, movieID, screenType, translateType, threeD); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
