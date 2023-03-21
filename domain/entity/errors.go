@@ -16,8 +16,9 @@ var (
 	ErrCinemaNotFound             = errors.New("cinema not found")
 	ErrCinemaAlreadyExisted       = errors.New("cinema has already existed")
 
-	ErrInvalidScreenType         = errors.New("invalid screen type")
-	ErrInvalidTranslateType      = errors.New("invalid translate type")
-	ErrScreenMovieNotFound       = errors.New("screen movie not found")
-	ErrScreenMovieAlreadyExisted = errors.New("screen movie has already existed")
+	ErrInvalidScreenType            = errors.New("invalid screen type")
+	ErrInvalidTranslateType         = errors.New("invalid translate type")
+	ErrScreenMovieNotFound          = errors.New("screen movie not found")
+	ErrScreenMovieAlreadyExisted    = errors.New("screen movie has already existed")
+	ErrScreenScheduleAlreadyExisted = errors.New("screen schedule has already existed")
 )

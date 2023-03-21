@@ -180,7 +180,7 @@ func TestMovieRepository_Create(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			repo := NewMovieRepository(db)
 			if err := repo.Create(context.Background(), tt.movie); !errors.Is(err, tt.wantErr) {
-				t.Errorf("MovieRepository.Create() errors is %v, wantErr is %v", err, tt.wantErr)
+				t.Errorf("MovieRepository.Create() error is %v, wantErr is %v", err, tt.wantErr)
 			}
 
 			t.Cleanup(func() {
@@ -215,7 +215,7 @@ func TestMovieRepository_Update(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			repo := NewMovieRepository(db)
 			if err := repo.Update(context.Background(), tt.movie); !errors.Is(err, tt.wantErr) {
-				t.Errorf("MovieRepository.Update() errors is %v, wantErr is %v", err, tt.wantErr)
+				t.Errorf("MovieRepository.Update() error is %v, wantErr is %v", err, tt.wantErr)
 			}
 		})
 	}
