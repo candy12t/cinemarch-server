@@ -28,7 +28,8 @@ func main() {
 	cinemaUC := usecase.NewCinemaUseCase(cinemaRepo)
 
 	screenMovieRepo := database.NewScreenMovieRepository(db)
-	screenMovieUC := usecase.NewScreenMovieUseCase(cinemaRepo, movieRepo, screenMovieRepo)
+	screenMovieService := database.NewScreenMovieQueryService(db)
+	screenMovieUC := usecase.NewScreenMovieUseCase(cinemaRepo, movieRepo, screenMovieRepo, screenMovieService)
 
 	r := server.NewRouter(movieUC, cinemaUC, screenMovieUC)
 	addr := fmt.Sprintf(":%s", config.HTTPPort())

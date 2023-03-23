@@ -9,7 +9,6 @@ import (
 
 type ScreenMovie interface {
 	FindByUniqKey(ctx context.Context, cinemaID, movieID entity.UUID, screenType entity.ScreenType, translateType entity.TranslateType, threeD bool) (*entity.ScreenMovie, error)
-	Search(ctx context.Context) (entity.ScreenMovies, error)
 	CreateScreenMovie(ctx context.Context, screenMovie *entity.ScreenMovie) error
 	CreateScreenSchedules(ctx context.Context, screenSchedules entity.ScreenSchedules) error
 }

@@ -26,6 +26,7 @@ func NewScreenMovieRepository(db *sqlx.DB) *ScreenMovieRepository {
 		db: db,
 	}
 }
+
 func (r *ScreenMovieRepository) FindByUniqKey(ctx context.Context, cinemaID, movieID entity.UUID, screenType entity.ScreenType, translateType entity.TranslateType, threeD bool) (*entity.ScreenMovie, error) {
 	dto := new(screenMovieDTO)
 	query := `
@@ -37,8 +38,15 @@ func (r *ScreenMovieRepository) FindByUniqKey(ctx context.Context, cinemaID, mov
 			screen_movies.translate_type AS translate_type,
 			screen_movies.three_d AS three_d,
 			CAST(concat('[',
-				GROUP_CONCAT(JSON_OBJECT('id', schedules.id, 'screen_movie_id', schedules.screen_movie_id, 'start_time', CAST(schedules.start_time AS CHAR), 'end_time', CAST(schedules.end_time AS CHAR))),
-				']') AS JSON) AS schedules
+				GROUP_CONCAT(
+					JSON_OBJECT(
+						'id', schedules.id,
+						'screen_movie_id', schedules.screen_movie_id,
+						'start_time', CAST(schedules.start_time AS CHAR),
+						'end_time', CAST(schedules.end_time AS CHAR)
+					)
+				),
+			']') AS JSON) AS schedules
 		FROM
 			screen_movies
 		INNER JOIN screen_schedules AS schedules
@@ -58,10 +66,6 @@ func (r *ScreenMovieRepository) FindByUniqKey(ctx context.Context, cinemaID, mov
 		return nil, err
 	}
 	return dtoToScreenMovie(dto)
-}
-
-func (r *ScreenMovieRepository) Search(ctx context.Context) (entity.ScreenMovies, error) {
-	return nil, nil
 }
 
 func (r *ScreenMovieRepository) CreateScreenMovie(ctx context.Context, screenMovie *entity.ScreenMovie) error {
@@ -104,6 +108,8 @@ type screenMovieDTO struct {
 	ThreeD        bool          `db:"three_d"`
 	Schedules     schedulesDTOs `db:"schedules"`
 }
+
+type screenMovieDTOs []*screenMovieDTO
 
 func dtoToScreenMovie(dto *screenMovieDTO) (*entity.ScreenMovie, error) {
 	schedules := make(entity.ScreenSchedules, 0, len(dto.Schedules))

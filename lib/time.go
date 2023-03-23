@@ -21,6 +21,10 @@ func jst() *time.Location {
 	return loc
 }
 
+func Today() string {
+	return FormatDate(time.Now().In(JST))
+}
+
 func ParseJSTDateInUTC(value string) (time.Time, error) {
 	return parseTime(dateFormat, value, JST, time.UTC)
 }

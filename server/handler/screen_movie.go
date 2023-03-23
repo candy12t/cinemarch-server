@@ -3,8 +3,11 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
+	"github.com/candy12t/cinemarch-server/query/dto"
 	"github.com/candy12t/cinemarch-server/usecase"
+	"github.com/go-chi/chi/v5"
 )
 
 type ScreenMovieHandler struct {
@@ -15,6 +18,36 @@ func NewScreenMovieHandler(screenMovieUC usecase.ScreenMovie) *ScreenMovieHandle
 	return &ScreenMovieHandler{
 		screenMovieUC: screenMovieUC,
 	}
+}
+
+func (h *ScreenMovieHandler) List(w http.ResponseWriter, r *http.Request) {
+	searchCondition := h.parseQuery(r.URL.Query())
+	searchCondition[dto.MovieID] = chi.URLParam(r, "movieID")
+
+	c := r.Context()
+	screenMovies, err := h.screenMovieUC.Search(c, searchCondition)
+	if err != nil {
+		ResponseJSON(w, NewHTTPError(err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	screenMovieJSONs := make([]*screenMovieResp, 0, len(screenMovies))
+	for _, screenMovie := range screenMovies {
+		screenMovieJSONs = append(screenMovieJSONs, screenMovieToResp(screenMovie))
+	}
+	ResponseJSON(w, screenMovieJSONs, http.StatusOK)
+}
+
+func (h *ScreenMovieHandler) parseQuery(params url.Values) dto.ScreenMovieSearchCondition {
+	searchCondition := make(dto.ScreenMovieSearchCondition, len(dto.ScreenMovieSearchKeys))
+	for k, v := range dto.ScreenMovieSearchKeys {
+		if params.Has(k.String()) {
+			searchCondition[k] = params.Get(k.String())
+		} else if !params.Has(k.String()) && len(v) != 0 {
+			searchCondition[k] = v
+		}
+	}
+	return searchCondition
 }
 
 func (h *ScreenMovieHandler) Create(w http.ResponseWriter, r *http.Request) {

@@ -7,30 +7,58 @@ import (
 	"github.com/candy12t/cinemarch-server/domain/entity"
 	"github.com/candy12t/cinemarch-server/domain/repository"
 	"github.com/candy12t/cinemarch-server/lib"
+	"github.com/candy12t/cinemarch-server/query/dto"
+	"github.com/candy12t/cinemarch-server/query/service"
 )
 
 type ScreenMovie interface {
 	Create(ctx context.Context, params CreateScreenMovieParams) (*ScreenMovieDTO, error)
-	Search(ctx context.Context)
+	Search(ctx context.Context, searchCondition dto.ScreenMovieSearchCondition) (ScreenMovieDTOs, error)
 }
 
 type ScreenMovieUseCase struct {
-	cinemaRepo      repository.Cinema
-	movieRepo       repository.Movie
-	screenMovieRepo repository.ScreenMovie
+	cinemaRepo         repository.Cinema
+	movieRepo          repository.Movie
+	screenMovieRepo    repository.ScreenMovie
+	screenMovieService service.ScreenMovie
 }
 
 var _ ScreenMovie = (*ScreenMovieUseCase)(nil)
 
-func NewScreenMovieUseCase(cinemaRepo repository.Cinema, movieRepo repository.Movie, screenMovieRepo repository.ScreenMovie) *ScreenMovieUseCase {
+func NewScreenMovieUseCase(cinemaRepo repository.Cinema, movieRepo repository.Movie, screenMovieRepo repository.ScreenMovie, screenMovieService service.ScreenMovie) *ScreenMovieUseCase {
 	return &ScreenMovieUseCase{
-		cinemaRepo:      cinemaRepo,
-		movieRepo:       movieRepo,
-		screenMovieRepo: screenMovieRepo,
+		cinemaRepo:         cinemaRepo,
+		movieRepo:          movieRepo,
+		screenMovieRepo:    screenMovieRepo,
+		screenMovieService: screenMovieService,
 	}
 }
 
-func (u *ScreenMovieUseCase) Search(ctx context.Context) {
+func (u *ScreenMovieUseCase) Search(ctx context.Context, searchCondition dto.ScreenMovieSearchCondition) (ScreenMovieDTOs, error) {
+	screenMovies, err := u.screenMovieService.Search(ctx, searchCondition)
+	if err != nil {
+		return nil, err
+	}
+	dtos := make(ScreenMovieDTOs, 0, len(screenMovies))
+	for _, sm := range screenMovies {
+		schedules := make(ScreenScheduleDTOs, 0, len(sm.Schedules))
+		for _, schedule := range sm.Schedules {
+			schedules = append(schedules, &ScreenScheduleDTO{
+				StartTime: schedule.StartTime,
+				EndTime:   schedule.EndTime,
+			})
+		}
+		dtos = append(dtos, &ScreenMovieDTO{
+			ID:              sm.ID,
+			CinemaName:      sm.CinemaName,
+			MovieTitle:      sm.MovieTitle,
+			ScreenType:      sm.ScreenType,
+			TranslateType:   sm.TranslateType,
+			ThreeD:          sm.ThreeD,
+			ScreenSchedules: schedules,
+		})
+	}
+	return dtos, nil
 }
 
 func (u *ScreenMovieUseCase) Create(ctx context.Context, params CreateScreenMovieParams) (*ScreenMovieDTO, error) {
@@ -114,13 +142,17 @@ type ScreenMovieDTO struct {
 	ScreenType      string
 	TranslateType   string
 	ThreeD          bool
-	ScreenSchedules []*ScreenScheduleDTO
+	ScreenSchedules ScreenScheduleDTOs
 }
+
+type ScreenMovieDTOs []*ScreenMovieDTO
 
 type ScreenScheduleDTO struct {
 	StartTime string
 	EndTime   string
 }
+
+type ScreenScheduleDTOs []*ScreenScheduleDTO
 
 func screenMovieToDTO(screenMovie *entity.ScreenMovie, screenSchedules entity.ScreenSchedules, cinemaName entity.CinemaName, movieTitle entity.MovieTitle) *ScreenMovieDTO {
 	screenScheduleDTOs := make([]*ScreenScheduleDTO, 0, len(screenMovie.ScreenSchedules)+len(screenSchedules))

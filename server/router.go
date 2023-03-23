@@ -32,9 +32,14 @@ func NewRouter(movieUC usecase.Movie, cinemaUC usecase.Cinema, screenMovieUC use
 
 				r.Route("/screen_movies", func(r chi.Router) {
 					h := handler.NewScreenMovieHandler(screenMovieUC)
-					r.Post("/", h.Create)
+					r.Get("/", h.List)
 				})
 			})
+		})
+
+		r.Route("/screen_movies", func(r chi.Router) {
+			h := handler.NewScreenMovieHandler(screenMovieUC)
+			r.Post("/", h.Create)
 		})
 
 		r.Route("/cinemas", func(r chi.Router) {

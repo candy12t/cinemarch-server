@@ -79,16 +79,16 @@ func (mr *MockScreenMovieMockRecorder) FindByUniqKey(ctx, cinemaID, movieID, scr
 }
 
 // Search mocks base method.
-func (m *MockScreenMovie) Search(ctx context.Context) (entity.ScreenMovies, error) {
+func (m *MockScreenMovie) Search(ctx context.Context, condition map[string]string) (entity.ScreenMovies, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Search", ctx)
+	ret := m.ctrl.Call(m, "Search", ctx, condition)
 	ret0, _ := ret[0].(entity.ScreenMovies)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search.
-func (mr *MockScreenMovieMockRecorder) Search(ctx interface{}) *gomock.Call {
+func (mr *MockScreenMovieMockRecorder) Search(ctx, condition interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockScreenMovie)(nil).Search), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockScreenMovie)(nil).Search), ctx, condition)
 }
