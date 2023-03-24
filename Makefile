@@ -32,7 +32,7 @@ clean:
 run-local-db:
 	set -a && \
 		. $(ENV_LOCAL_FILE) && \
-		docker compose up -d && \
+		docker-compose up -d && \
 		until mysql -u$${DB_USER} -p$${DB_PASSWORD} -h$${DB_HOST} -P$${DB_PORT} -e "SELECT 1"; do sleep 10; done
 
 .PHONY: migrate
@@ -43,11 +43,13 @@ migrate:
 
 .PHONY: stop-local-db
 stop-local-db:
-	docker compose down
+	docker-compose down
 
 .PHONY: delete-local-db
 delete-local-db:
-	docker compose down -v
+	set -a && \
+		. $(ENV_LOCAL_FILE) && \
+		docker-compose down -v
 
 .PHONY: generate
 generate:

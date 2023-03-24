@@ -11,7 +11,7 @@ func TestDSN(t *testing.T) {
 	}{
 		{
 			name: "be able to get DSN",
-			want: "cinemarch:password@tcp(127.0.0.1:3306)/cinemarch?parseTime=true",
+			want: "cinemarch:password@tcp(127.0.0.1:13306)/cinemarch?parseTime=true",
 		},
 	}
 
