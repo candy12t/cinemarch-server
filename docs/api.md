@@ -1,0 +1,81 @@
+# API Specification
+
+- 映画の登録更新
+    - endpoint: /api/v1/movies
+    - method: PUT
+    - content-type: application/json
+    - parameter:
+        - title:
+            - type: string
+        - release_date:
+            - type: string
+            - formant: YYYY-MM-DD
+        - release_status:
+            - type: enum
+            - value:
+                - COMMING SOON
+                - NOW OPEN
+                - RELEASED
+- 映画の検索
+    - endpoint: /api/v1/movies/search
+    - method: GET
+    - query_parameter:
+        - title
+
+- 指定したIDの映画を取得
+    - endpoint: /api/v1/movies/:id
+    - method: GET
+
+- 指定したIDの映画の上映情報を取得
+    - endpoint: /api/v1/movies/:id/screen_movies 
+    - method: GET
+    - query_parameter:
+        - movie_id
+        - prefecture
+        - screen_date
+        - screen_type
+        - translate_type
+        - three_d
+
+- 映画の上映情報の登録更新
+    - endpoint: /api/v1/screen_movies 
+    - method: PUT
+    - content-type: application/json
+    - parameter:
+        - cinema_name:
+            - type: string
+        - movie_title:
+            - type: string
+        - screen_type:
+            - type: enum
+        - translate_type:
+            - type: enum
+        - three_d:
+            - type: boolean
+        - schedules:
+            - type: array of hash
+            - parameter:
+                - start_time:
+                    - type: string
+                    - format: YYYY-MM-DD HH:MM
+                - end_time:
+                    - type: string
+                    - format: YYYY-MM-DD HH:MM
+
+- 映画館の新規登録
+    - endpoint: /api/v1/cinemas 
+    - method: POST
+    - content-type: application/json
+    - parameter:
+        - name:
+            - type: string
+        - prefecture:
+            - type: string
+        - address:
+            - type: string
+        - web_site:
+            - type: string
+
+- 指定したIDの映画館を取得
+    - endpoint: /api/v1/cinemas/:id
+    - method: GET
